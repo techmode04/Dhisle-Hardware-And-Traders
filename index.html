@@ -92,6 +92,41 @@
         .marquee-track:hover {
             animation-play-state: paused;
         }
+
+        /* Admin Interactive Highlights */
+        .admin-editable {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .admin-editable::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 107, 0, 0.15);
+            border: 2px dashed #ff6b00;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            border-radius: inherit;
+            z-index: 30;
+        }
+        body.admin-mode-active .admin-editable::after {
+            opacity: 1;
+        }
+        body.admin-mode-active .admin-editable:hover::after {
+            background: rgba(255, 107, 0, 0.3);
+            content: 'Click to Change Image';
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-brand-charcoal dark:text-slate-100 font-sans antialiased transition-colors duration-300">
@@ -99,7 +134,6 @@
     <!-- Page Loader -->
     <div id="loader" class="fixed inset-0 z-[100] bg-brand-charcoal flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative flex flex-col items-center">
-            <!-- Animated spinning heavy-duty gear icon -->
             <div class="w-20 h-20 border-4 border-t-brand-orange border-r-transparent border-b-brand-orange border-l-transparent rounded-full animate-spin"></div>
             <i class="fa-solid fa-screwdriver-wrench text-brand-orange text-3xl absolute top-6 animate-pulse"></i>
             <h2 class="text-white font-extrabold text-2xl tracking-wider mt-6">DHISLE HARDWARE</h2>
@@ -107,8 +141,29 @@
         </div>
     </div>
 
+    <!-- Hidden Master Image Uploader Input -->
+    <input type="file" id="master-image-uploader" accept="image/*" class="hidden" onchange="handleMasterImageUploaded(event)" />
+
+    <!-- Admin Management Header Banner -->
+    <div id="admin-status-banner" class="hidden bg-gradient-to-r from-amber-600 via-brand-orange to-red-600 text-white px-4 py-2.5 text-xs md:text-sm font-extrabold shadow-lg sticky top-0 z-[60] border-b border-orange-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-2 animate-pulse">
+                <span class="w-2.5 h-2.5 rounded-full bg-green-400 inline-block"></span>
+                <span>ADMIN CONTROL PANEL ACTIVE — Click on any dashed frame to replace photos instantly!</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="triggerResetAllImages()" class="bg-black/40 hover:bg-black/60 px-3 py-1 rounded-lg text-[10px] uppercase font-mono tracking-widest transition-all">
+                    Reset All Photos
+                </button>
+                <button onclick="logoutAdmin()" class="bg-white text-brand-charcoal hover:bg-zinc-100 px-4 py-1 rounded-lg shadow-md transition-all">
+                    Exit Admin Mode <i class="fa-solid fa-right-from-bracket ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Top Alert/Info Bar -->
-    <div class="bg-brand-charcoal dark:bg-black text-white py-2 px-4 text-xs md:text-sm font-medium border-b border-zinc-800">
+    <div class="bg-brand-charcoal dark:bg-black text-white py-2 px-4 text-xs md:text-sm font-medium border-b border-zinc-800 relative z-40">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-brand-orange"></i> Raimoha, Beed, Maharashtra</span>
@@ -118,6 +173,10 @@
                 <a href="tel:9359876866" class="hover:text-brand-orange transition-colors flex items-center gap-1.5">
                     <i class="fa-solid fa-phone text-brand-orange"></i> +91 9359876866
                 </a>
+                <!-- Admin Lock Trigger -->
+                <button onclick="openAdminModal()" class="text-zinc-400 hover:text-brand-orange transition-colors flex items-center gap-1 px-2 py-0.5 rounded border border-zinc-800 bg-zinc-900/50">
+                    <i class="fa-solid fa-lock text-[10px]"></i> Admin Portal
+                </button>
             </div>
         </div>
     </div>
@@ -130,8 +189,11 @@
             <div class="flex items-center gap-2">
                 <a href="#" class="flex items-center gap-3 group focus:outline-none">
                     <div id="logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg shadow-brand-orange/20 transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
-                        <img src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('fallback-logo-icon').classList.remove('hidden');">
-                        <i id="fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
+                        <!-- Logo Upload Trigger -->
+                        <div class="admin-editable w-full h-full flex items-center justify-center" onclick="triggerImageUpload('logo', event)">
+                            <img id="img-logo" src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('fallback-logo-icon').classList.remove('hidden');">
+                            <i id="fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
+                        </div>
                     </div>
                     <div class="flex flex-col">
                         <span class="font-extrabold text-lg md:text-xl lg:text-2xl tracking-tight leading-none text-brand-charcoal dark:text-white group-hover:text-brand-orange transition-colors">
@@ -175,7 +237,7 @@
             </div>
         </div>
 
-        <!-- Mobile Side Drawer / Dropdown Menu -->
+        <!-- Mobile Side Drawer -->
         <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-zinc-800 bg-white dark:bg-brand-charcoalLight transition-all duration-300">
             <div class="px-4 py-4 space-y-3 flex flex-col font-medium text-sm">
                 <a href="#" class="mobile-nav-link text-brand-orange py-2 px-3 rounded-lg bg-orange-50 dark:bg-zinc-800">Home</a>
@@ -271,43 +333,89 @@
                     </div>
                 </div>
 
-                <!-- Right Visual Area: Product Showroom Showcase Grid -->
+                <!-- Right Visual Area: Product Showroom Showcase Grid with custom photo upload cues -->
                 <div class="lg:col-span-5 relative">
                     <div class="absolute inset-0 bg-brand-orange/10 dark:bg-brand-orange/20 rounded-3xl blur-3xl transform rotate-6 scale-90"></div>
                     
                     <div class="relative grid grid-cols-2 gap-4">
-                        <!-- Card 1: Steel Structure -->
+                        <!-- Column 1: Steel Structure & Handtools -->
                         <div class="space-y-4">
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group">
-                                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=500" alt="Steel Structure Materials" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/500x480/222222/ffffff?text=Premium+Steel'"/>
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">Heavy Duty</span>
-                                    <h3 class="font-bold text-sm">Industrial Steel & Pipes</h3>
+                            <!-- Card 1: Steel Structure -->
+                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4" onclick="triggerImageUpload('hero-steel', event)">
+                                <img id="img-hero-steel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                                
+                                <div id="placeholder-hero-steel" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
+                                        File: <span class="font-bold text-rose-500">hero-steel.jpg</span>
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center my-auto py-2">
+                                        <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Steel Photo</p>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Heavy Duty</span>
+                                    <h3 class="font-bold text-xs">Industrial Steel & Pipes</h3>
                                 </div>
                             </div>
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group">
-                                <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=500" alt="Hardware Handtools" class="w-full h-36 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/500x360/222222/ffffff?text=Tools'"/>
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">Hardware Store</span>
-                                    <h3 class="font-bold text-sm">Premium Tools & Fasteners</h3>
+                            
+                            <!-- Card 2: Hardware Handtools -->
+                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4" onclick="triggerImageUpload('hero-tools', event)">
+                                <img id="img-hero-tools" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                                
+                                <div id="placeholder-hero-tools" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
+                                        File: <span class="font-bold text-rose-500">hero-tools.jpg</span>
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center my-auto py-1">
+                                        <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
+                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Tools Photo</p>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Hardware Store</span>
+                                    <h3 class="font-bold text-xs">Premium Tools</h3>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Card 2: Paints & Farming -->
+                        <!-- Column 2: Paints & Farming -->
                         <div class="space-y-4 pt-8">
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group">
-                                <img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&q=80&w=500" alt="Paints & Brushes" class="w-full h-36 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/500x360/222222/ffffff?text=Paints'"/>
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">Vibrant Homes</span>
-                                    <h3 class="font-bold text-sm">Asian & Berger Paints</h3>
+                            <!-- Card 3: Paints & Brushes -->
+                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4" onclick="triggerImageUpload('hero-paints', event)">
+                                <img id="img-hero-paints" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                                
+                                <div id="placeholder-hero-paints" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
+                                        File: <span class="font-bold text-rose-500">hero-paints.jpg</span>
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center my-auto py-1">
+                                        <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
+                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Paint Photo</p>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Vibrant Homes</span>
+                                    <h3 class="font-bold text-xs">Asian & Berger Paints</h3>
                                 </div>
                             </div>
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group">
-                                <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=500" alt="Agriculture Pumps" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/500x480/222222/ffffff?text=Agri+Motors'"/>
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex flex-col justify-end p-4 text-white">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-brand-orange">Farming Tools</span>
-                                    <h3 class="font-bold text-sm">Irrigation & Agriculture</h3>
+
+                            <!-- Card 4: Agriculture Pumps -->
+                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4" onclick="triggerImageUpload('hero-agri', event)">
+                                <img id="img-hero-agri" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                                
+                                <div id="placeholder-hero-agri" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
+                                        File: <span class="font-bold text-rose-500">hero-agri.jpg</span>
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center my-auto py-2">
+                                        <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Agri Photo</p>
+                                    </div>
+                                </div>
+                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Farming Tools</span>
+                                    <h3 class="font-bold text-xs">Irrigation & Pump Sets</h3>
                                 </div>
                             </div>
                         </div>
@@ -323,12 +431,31 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 
-                <!-- Left Column: Visual Brand Anchor with floating badges -->
+                <!-- Left Column: Visual Brand Anchor with smart local upload fallbacks -->
                 <div class="relative">
                     <div class="absolute -top-4 -left-4 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl"></div>
                     
                     <div class="relative border-4 border-slate-100 dark:border-zinc-800 rounded-3xl p-6 overflow-hidden bg-slate-50 dark:bg-zinc-900 shadow-xl">
-                        <img src="owner.png" alt="Hardware Store Inventory Setup" class="rounded-2xl shadow-md w-full h-[380px] object-cover" onerror="this.src='https://placehold.co/800x600/222222/ffffff?text=Dhisle+Hardware+Store'"/>
+                        
+                        <!-- Owner/Shop Showcase Picture Placeholder -->
+                        <div class="admin-editable relative rounded-2xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-zinc-700 bg-slate-200/40 dark:bg-zinc-800/40 h-[380px] w-full flex flex-col justify-between p-6" onclick="triggerImageUpload('owner', event)">
+                            <img id="img-owner" alt="Dhisle Hardware Storefront" class="absolute inset-0 rounded-2xl w-full h-full object-cover hidden" />
+                            
+                            <div id="placeholder-owner" class="relative z-10 bg-white/95 dark:bg-zinc-900/95 p-3 rounded-xl border border-slate-200 dark:border-zinc-800 self-start text-xs font-semibold pointer-events-none">
+                                <span class="text-brand-orange font-bold uppercase tracking-wider block mb-1">📸 Shop Front / Owner Photo Guidance</span>
+                                <p class="text-slate-500 dark:text-slate-400 leading-normal">
+                                    Take a high-quality photo of your storefront, name the image <code class="font-bold bg-slate-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-rose-500">owner.png</code>, or click here to upload directly!
+                                </p>
+                            </div>
+
+                            <div id="placeholder-owner-icon" class="relative z-10 flex flex-col items-center justify-center my-auto pointer-events-none">
+                                <div class="w-16 h-16 rounded-full bg-brand-orange/10 dark:bg-brand-orange/20 flex items-center justify-center text-brand-orange mb-3 animate-bounce">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                                </div>
+                                <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">Click to Upload "owner.png"</span>
+                                <span class="text-xs text-slate-400 dark:text-zinc-500 mt-1">Recommended size: 800 x 600 px</span>
+                            </div>
+                        </div>
                         
                         <!-- Floating Counter Badges -->
                         <div class="absolute bottom-10 right-10 bg-brand-charcoal text-white p-5 rounded-2xl shadow-2xl border border-zinc-800 flex items-center gap-4">
@@ -413,7 +540,7 @@
 
                     <!-- Category Quick Filter Pills -->
                     <div class="w-full overflow-x-auto flex gap-2 pb-1 lg:pb-0 scrollbar-none" id="filter-pills-container">
-                        <!-- Dynamic categories will injection -->
+                        <!-- Dynamic categories injected here -->
                         <button onclick="setFilterCategory('All')" class="category-pill active-pill px-4 py-2 bg-brand-orange text-white rounded-xl text-xs font-bold whitespace-nowrap transition-all">
                             All Categories
                         </button>
@@ -424,7 +551,7 @@
 
             <!-- Dynamic Product Grid -->
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-300">
-                <!-- Javascript will inject fully responsive cards here -->
+                <!-- Javascript will inject customizable, fully responsive upload-guide cards here -->
             </div>
 
             <!-- Product Not Found State -->
@@ -536,7 +663,6 @@
 
     <!-- Why Choose Us & Key Counter Statistics Section -->
     <section id="why-choose-us" class="py-20 bg-brand-charcoal text-white relative overflow-hidden">
-        <!-- Background Grid Pattern Accent with opacity -->
         <div class="absolute inset-0 bg-[radial-gradient(#ff6b00_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -549,7 +675,7 @@
                 </p>
             </div>
 
-            <!-- Stats/Counters Grid with Custom JS Trigger Hook -->
+            <!-- Stats/Counters Grid -->
             <div id="stats-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
                 
                 <div class="bg-zinc-900/80 border border-zinc-800 p-6 rounded-2xl text-center space-y-2">
@@ -628,11 +754,9 @@
         </div>
 
         <div class="relative w-full overflow-hidden">
-            <!-- Fade gradients on left/right edges for a premium slider transition -->
             <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white dark:from-brand-charcoalLight to-transparent z-10"></div>
             <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white dark:from-brand-charcoalLight to-transparent z-10"></div>
 
-            <!-- Double-buffered continuous track for infinite scrolling speed -->
             <div class="marquee-track flex gap-12 items-center py-4 text-slate-700 dark:text-slate-300">
                 <!-- Set 1 -->
                 <span class="text-xl font-extrabold uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-droplet text-brand-orange"></i> ASIAN PAINTS</span>
@@ -643,7 +767,7 @@
                 <span class="text-xl font-extrabold uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-layer-group text-brand-orange"></i> SUPREME PIPES</span>
                 <span class="text-xl font-extrabold uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-ring text-brand-orange"></i> PRINCE PIPES</span>
                 
-                <!-- Set 2 (Duplicate for continuous seamless loop) -->
+                <!-- Set 2 -->
                 <span class="text-xl font-extrabold uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-droplet text-brand-orange"></i> ASIAN PAINTS</span>
                 <span class="text-xl font-extrabold uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-shield text-brand-orange"></i> BERGER PAINTS</span>
                 <span class="text-xl font-extrabold uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-circle text-brand-orange"></i> TATA STEEL</span>
@@ -668,72 +792,120 @@
                 <div class="flex flex-wrap gap-2">
                     <button onclick="filterGallery('all')" class="gallery-tab active-tab px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-zinc-800 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-brand-orange text-white">All Areas</button>
                     <button onclick="filterGallery('showroom')" class="gallery-tab px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-zinc-800 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800">Interior Showroom</button>
-                    <button onclick="filterGallery('steel')" class="gallery-tab px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-zinc-800 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800">Steel & Fabrication Stock</button>
+                    <button onclick="filterGallery('steel')" class="gallery-tab px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-zinc-800 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800">Steel Stock</button>
                     <button onclick="filterGallery('paint')" class="gallery-tab px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-zinc-800 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800">Paints Section</button>
                     <button onclick="filterGallery('agri')" class="gallery-tab px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-zinc-800 transition-all hover:bg-zinc-100 dark:hover:bg-zinc-800">Agricultural Pumps</button>
                 </div>
             </div>
 
-            <!-- Gallery Images Masonry Grid -->
+            <!-- Gallery Images Grid (Guides for uploading your real photos) -->
             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
                 
-                <!-- Gallery Card 1 -->
-                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900">
-                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600" alt="Hardware Store Interior" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x480/222222/ffffff?text=Interior'"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-xs font-bold text-brand-orange uppercase">Interior Showroom</span>
-                        <h4 class="font-extrabold text-lg mt-1">Premium Hardware Counters</h4>
-                        <p class="text-xs text-slate-300 mt-1">Sleek display shelves showcasing premium level locking structures & accessories.</p>
+                <!-- Gallery Card 1: Interior -->
+                <div class="admin-editable gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-interior', event)">
+                    <img id="img-gallery-interior" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
+                    <div id="placeholder-gallery-interior" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
+                            Save as: <span class="text-rose-500 font-bold">gallery-interior.jpg</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center my-auto">
+                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Interior Showroom Photo</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Interior Showroom</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Premium Hardware Counters</h4>
                     </div>
                 </div>
 
-                <!-- Gallery Card 2 -->
-                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900">
-                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=600" alt="Steel Material Stock" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x480/222222/ffffff?text=Steel+Material'"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-xs font-bold text-brand-orange uppercase">Steel Yard</span>
-                        <h4 class="font-extrabold text-lg mt-1">Structural Sections Stock</h4>
-                        <p class="text-xs text-slate-300 mt-1">Rust-resistant square bars, angle profiles, channels, and reinforcing rod stocks.</p>
+                <!-- Gallery Card 2: Steel -->
+                <div class="admin-editable gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-steel', event)">
+                    <img id="img-gallery-steel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
+                    <div id="placeholder-gallery-steel" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
+                            Save as: <span class="text-rose-500 font-bold">gallery-steel.jpg</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center my-auto">
+                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Steel Yard Photo</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Steel Yard</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Structural Sections Stock</h4>
                     </div>
                 </div>
 
-                <!-- Gallery Card 3 -->
-                <div class="gallery-item paint relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900">
-                    <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600" alt="Paint Section Layout" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x480/222222/ffffff?text=Paint+Mixer'"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-xs font-bold text-brand-orange uppercase">Paints Section</span>
-                        <h4 class="font-extrabold text-lg mt-1">Computerized Mixing Machine</h4>
-                        <p class="text-xs text-slate-300 mt-1">Produce up to 10,000 custom decorative paint shades instantly with Asian Paints color tint systems.</p>
+                <!-- Gallery Card 3: Paints -->
+                <div class="admin-editable gallery-item paint relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-paint', event)">
+                    <img id="img-gallery-paint" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
+                    <div id="placeholder-gallery-paint" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
+                            Save as: <span class="text-rose-500 font-bold">gallery-paint.jpg</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center my-auto">
+                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Paint Section Photo</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Paints Section</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Computerized Mixing Machine</h4>
                     </div>
                 </div>
 
-                <!-- Gallery Card 4 -->
-                <div class="gallery-item agri relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900">
-                    <img src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=600" alt="Agricultural Sprayers & Motors" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x480/222222/ffffff?text=Agri+Stock'"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-xs font-bold text-brand-orange uppercase">Agricultural Stocks</span>
-                        <h4 class="font-extrabold text-lg mt-1">High-Pressure Spray Pumps</h4>
-                        <p class="text-xs text-slate-300 mt-1">Complete stock of irrigation pumps, farming valves, and manual crop sprayer systems.</p>
+                <!-- Gallery Card 4: Agri -->
+                <div class="admin-editable gallery-item agri relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-agri', event)">
+                    <img id="img-gallery-agri" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
+                    <div id="placeholder-gallery-agri" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
+                            Save as: <span class="text-rose-500 font-bold">gallery-agri.jpg</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center my-auto">
+                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Agri Stocks Photo</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Agricultural Stocks</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">High-Pressure Spray Pumps</h4>
                     </div>
                 </div>
 
-                <!-- Gallery Card 5 -->
-                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900">
-                    <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&q=80&w=600" alt="Pipe Fittings" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x480/222222/ffffff?text=Pipes+and+Fittings'"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-xs font-bold text-brand-orange uppercase">Pipes & Fittings</span>
-                        <h4 class="font-extrabold text-lg mt-1">CPVC & PVC Connectors</h4>
-                        <p class="text-xs text-slate-300 mt-1">High-impact valves, joints, adhesives, and secure water tank pipeline fittings.</p>
+                <!-- Gallery Card 5: Plumbing/Pipes -->
+                <div class="admin-editable gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-plumbing', event)">
+                    <img id="img-gallery-plumbing" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
+                    <div id="placeholder-gallery-plumbing" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
+                            Save as: <span class="text-rose-500 font-bold">gallery-plumbing.jpg</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center my-auto">
+                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Pipes / Fittings Photo</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Pipes & Fittings</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">CPVC & PVC Connectors</h4>
                     </div>
                 </div>
 
-                <!-- Gallery Card 6 -->
-                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900">
-                    <img src="https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&q=80&w=600" alt="Safety and Cutting tools" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/600x480/222222/ffffff?text=Safety+Gear'"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6 text-white opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span class="text-xs font-bold text-brand-orange uppercase">Construction Yard</span>
-                        <h4 class="font-extrabold text-lg mt-1">Cutting Discs & Safety Gear</h4>
-                        <p class="text-xs text-slate-300 mt-1">Masonry blades, structural steel cutting discs, gloves, safety boots, and hard hats.</p>
+                <!-- Gallery Card 6: Construction Yard / Tools -->
+                <div class="admin-editable gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-yard', event)">
+                    <img id="img-gallery-yard" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
+                    <div id="placeholder-gallery-yard" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
+                            Save as: <span class="text-rose-500 font-bold">gallery-yard.jpg</span>
+                        </div>
+                        <div class="flex flex-col items-center justify-center my-auto">
+                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Construction Yard Photo</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Construction Yard</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Cutting Discs & Safety Gear</h4>
                     </div>
                 </div>
 
@@ -951,9 +1123,8 @@
                         </form>
                     </div>
 
-                    <!-- Embed Google Map with robust iframe wrapper -->
+                    <!-- Embed Google Map -->
                     <div class="h-64 sm:h-72 rounded-3xl overflow-hidden shadow-lg border border-slate-200 dark:border-zinc-800/80 relative">
-                        <!-- Simulated Interactive Embedded Google Map for Raimoha Beed -->
                         <iframe 
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15065.111818274003!2d75.642032!3d19.051025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be27bbf294d13bf%3A0xe548ebc4a85fa9b5!2sRaimoha%2C%20Maharashtra%20414205!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
                             width="100%" 
@@ -976,11 +1147,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-12 border-b border-zinc-800/80">
                 
-                <!-- Col 1: Brand Info (Lg: col-span-5) -->
+                <!-- Col 1: Brand Info -->
                 <div class="lg:col-span-5 space-y-4">
                     <div class="flex items-center gap-3">
                         <div id="footer-logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg flex items-center justify-center overflow-hidden">
-                            <img src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('footer-fallback-logo-icon').classList.remove('hidden');">
+                            <img id="img-logo-footer" src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('footer-fallback-logo-icon').classList.remove('hidden');">
                             <i id="footer-fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl"></i>
                         </div>
                         <div class="flex flex-col">
@@ -1008,7 +1179,7 @@
                     </div>
                 </div>
 
-                <!-- Col 2: Useful Quick Links (Lg: col-span-3) -->
+                <!-- Col 2: Useful Quick Links -->
                 <div class="lg:col-span-3 space-y-4">
                     <h4 class="font-bold text-sm uppercase tracking-widest text-brand-orange">Quick Navigation</h4>
                     <ul class="space-y-2 text-sm text-zinc-400">
@@ -1021,7 +1192,7 @@
                     </ul>
                 </div>
 
-                <!-- Col 3: Legal & Products (Lg: col-span-4) -->
+                <!-- Col 3: Legal & Products -->
                 <div class="lg:col-span-4 space-y-4">
                     <h4 class="font-bold text-sm uppercase tracking-widest text-brand-orange">Main Core Materials</h4>
                     <ul class="space-y-2 text-sm text-zinc-400">
@@ -1055,7 +1226,7 @@
             <i class="fa-solid fa-arrow-up text-lg"></i>
         </button>
 
-        <!-- Floating Quick Call button (Mobile focus) -->
+        <!-- Floating Quick Call button -->
         <a href="tel:9359876866" class="w-12 h-12 rounded-full bg-brand-orange text-white hover:bg-brand-accent shadow-2xl flex items-center justify-center transition-all duration-300 hover:-translate-y-1" aria-label="Call Store Directly">
             <i class="fa-solid fa-phone text-lg animate-pulse"></i>
         </a>
@@ -1066,25 +1237,120 @@
         </a>
     </div>
 
+    <!-- Admin Portal Login Modal -->
+    <div id="admin-login-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+        <div class="bg-white dark:bg-zinc-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-zinc-800 shadow-2xl relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-orange-100 dark:bg-orange-950/40 text-brand-orange rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Dhisle Hardware Admin Portal</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Authorized store management dashboard login</p>
+            </div>
+
+            <form id="admin-login-form" onsubmit="handleAdminLoginSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Access Password</label>
+                    <input type="password" id="admin-password" placeholder="Enter security password (Default: admin123)" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm focus:ring-2 focus:ring-brand-orange focus:outline-none dark:text-white"/>
+                </div>
+                
+                <div id="login-error-msg" class="hidden text-xs text-rose-500 font-bold bg-rose-50 dark:bg-rose-950/20 p-2 rounded-lg border border-rose-200 dark:border-rose-900/30">
+                    Incorrect password. Please try again or use default: <code class="font-mono bg-white dark:bg-zinc-900 px-1 py-0.5 rounded">admin123</code>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-brand-orange hover:bg-brand-accent text-white font-bold rounded-xl text-sm shadow-lg transition-colors flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-unlock"></i> Unlock Store Management Mode
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC BLOCK -->
     <script>
         // Custom interactive products dataset
         const productsData = [
-            { id: 1, name: "Nuts & Bolts Assortment", category: "Hardware Items", desc: "Grade 8.8 high-tensile fasteners, bolts, and washers.", icon: "fa-solid fa-circle-nodes", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=400" },
-            { id: 2, name: "Industrial Locks & Hinges", category: "Hardware Items", desc: "Heavy brass locks, hinges, and premium door hardware fittings.", icon: "fa-solid fa-key", img: "https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&q=80&w=400" },
-            { id: 3, name: "Angle & MS Channels", category: "Steel & Metal", desc: "Hot-rolled mild steel structural channels for construction frames.", icon: "fa-solid fa-square-envelope", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=400" },
-            { id: 4, name: "Tata Steel Round Pipe", category: "Steel & Metal", desc: "Galvanized hollow pipes for fencing & structural building.", icon: "fa-solid fa-circle", img: "https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&q=80&w=400" },
-            { id: 5, name: "Patra Roofing Sheets", category: "Roofing & Sheet Materials", desc: "Anti-rust coated galvanized corrugated roofing sheets.", icon: "fa-solid fa-layer-group", img: "https://images.unsplash.com/photo-1620013511111-9a99c456a41d4a?auto=format&fit=crop&q=80&w=400" },
-            { id: 6, name: "Asian Paints Apex Emulsion", category: "Paint & Finishing", desc: "High-grade weather protective exterior emulsion paints.", icon: "fa-solid fa-paintbrush", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=400" },
-            { id: 7, name: "CPVC Hot/Cold Pipes", category: "Plumbing Materials", desc: "Chlorinated polyvinyl chloride pipes for industrial fluid transport.", icon: "fa-solid fa-droplet", img: "https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&q=80&w=400" },
-            { id: 8, name: "Agriculture Spray Pump", category: "Agricultural Equipment", desc: "Knapsack manual and battery operated power pest spray units.", icon: "fa-solid fa-spray-can-sparkles", img: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=400" },
-            { id: 9, name: "Drip Irrigation Valve", category: "Agricultural Equipment", desc: "Low-pressure high efficiency water emission irrigation pipeline valves.", icon: "fa-solid fa-seedling", img: "https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&q=80&w=400" },
-            { id: 10, name: "Water Motors / Submersible Pumps", category: "Agricultural Equipment", desc: "Heavy duty copper-wound agricultural water motor sets.", icon: "fa-solid fa-gears", img: "https://images.unsplash.com/photo-1581094288338-2314dddb7eed?auto=format&fit=crop&q=80&w=400" },
-            { id: 11, name: "Berger Wall Putty & Primer", category: "Paint & Finishing", desc: "Moisture resistant interior paint bases for smooth gloss finishes.", icon: "fa-solid fa-palette", img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&q=80&w=400" },
-            { id: 12, name: "Concrete Cutting Discs", category: "Construction Materials", desc: "Heavy diamond grit masonry circular saw cutting wheels.", icon: "fa-solid fa-compact-disc", img: "https://images.unsplash.com/photo-1535813547-99c456a41d4a?auto=format&fit=crop&q=80&w=400" }
+            { id: 1, name: "Nuts & Bolts Assortment", category: "Hardware Items", desc: "Grade 8.8 high-tensile fasteners, bolts, and washers.", icon: "fa-solid fa-circle-nodes", imgKey: "product-1" },
+            { id: 2, name: "Industrial Locks & Hinges", category: "Hardware Items", desc: "Heavy brass locks, hinges, and premium door hardware fittings.", icon: "fa-solid fa-key", imgKey: "product-2" },
+            { id: 3, name: "Angle & MS Channels", category: "Steel & Metal", desc: "Hot-rolled mild steel structural channels for construction frames.", icon: "fa-solid fa-square-envelope", imgKey: "product-3" },
+            { id: 4, name: "Tata Steel Round Pipe", category: "Steel & Metal", desc: "Galvanized hollow pipes for fencing & structural building.", icon: "fa-solid fa-circle", imgKey: "product-4" },
+            { id: 5, name: "Patra Roofing Sheets", category: "Roofing & Sheet Materials", desc: "Anti-rust coated galvanized corrugated roofing sheets.", icon: "fa-solid fa-layer-group", imgKey: "product-5" },
+            { id: 6, name: "Asian Paints Apex Emulsion", category: "Paint & Finishing", desc: "High-grade weather protective exterior emulsion paints.", icon: "fa-solid fa-paintbrush", imgKey: "product-6" },
+            { id: 7, name: "CPVC Hot/Cold Pipes", category: "Plumbing Materials", desc: "Chlorinated polyvinyl chloride pipes for industrial fluid transport.", icon: "fa-solid fa-droplet", imgKey: "product-7" },
+            { id: 8, name: "Agriculture Spray Pump", category: "Agricultural Equipment", desc: "Knapsack manual and battery operated power pest spray units.", icon: "fa-solid fa-spray-can-sparkles", imgKey: "product-8" },
+            { id: 9, name: "Drip Irrigation Valve", category: "Agricultural Equipment", desc: "Low-pressure high efficiency water emission irrigation pipeline valves.", icon: "fa-solid fa-seedling", imgKey: "product-9" },
+            { id: 10, name: "Water Motors / Submersible Pumps", category: "Agricultural Equipment", desc: "Heavy duty copper-wound agricultural water motor sets.", icon: "fa-solid fa-gears", imgKey: "product-10" },
+            { id: 11, name: "Berger Wall Putty & Primer", category: "Paint & Finishing", desc: "Moisture resistant interior paint bases for smooth gloss finishes.", icon: "fa-solid fa-palette", imgKey: "product-11" },
+            { id: 12, name: "Concrete Cutting Discs", category: "Construction Materials", desc: "Heavy diamond grit masonry circular saw cutting wheels.", icon: "fa-solid fa-compact-disc", imgKey: "product-12" }
         ];
 
         let selectedCategory = "All";
+        let isAdminLoggedIn = false;
+        let selectedUploadKey = null;
+
+        // LOCAL PERSISTENT STORAGE: Setup IndexedDB database
+        let db;
+        const dbName = "DhisleHardwareDB";
+        const storeName = "images";
+        let imageCache = {};
+
+        const request = indexedDB.open(dbName, 1);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            db.createObjectStore(storeName);
+        };
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            loadPersistedImages();
+        };
+        request.onerror = (e) => {
+            console.error("IndexedDB load error: ", e);
+            renderProductsGrid();
+        };
+
+        // Load images from database and render on DOM
+        function loadPersistedImages() {
+            const tx = db.transaction(storeName, "readonly");
+            const store = tx.objectStore(storeName);
+            const req = store.openCursor();
+            req.onsuccess = (e) => {
+                const cursor = e.target.result;
+                if (cursor) {
+                    imageCache[cursor.key] = cursor.value;
+                    applyStoredImageToDOM(cursor.key, cursor.value);
+                    cursor.continue();
+                } else {
+                    renderProductsGrid();
+                }
+            };
+        }
+
+        // Apply loaded image to DOM based on key
+        function applyStoredImageToDOM(key, base64Data) {
+            const staticImg = document.getElementById("img-" + key);
+            const placeholder = document.getElementById("placeholder-" + key);
+            const ownerIcon = document.getElementById("placeholder-owner-icon");
+
+            if (staticImg) {
+                staticImg.src = base64Data;
+                staticImg.classList.remove("hidden");
+                // Hide placeholders
+                if (placeholder) placeholder.classList.add("hidden");
+                if (key === 'owner' && ownerIcon) ownerIcon.classList.add("hidden");
+            }
+
+            // Sync dual logos
+            if (key === 'logo') {
+                const footerLogo = document.getElementById("img-logo-footer");
+                if (footerLogo) {
+                    footerLogo.src = base64Data;
+                    footerLogo.classList.remove("hidden");
+                }
+            }
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             // Remove Page Loader
@@ -1097,9 +1363,6 @@
             // Populate Filter Pills Dynamic Creation
             generateCategoryFilterPills();
 
-            // Populate Product Grid UI
-            renderProductsGrid();
-
             // Trigger statistics animation observer
             setupStatsCounterObserver();
 
@@ -1108,6 +1371,11 @@
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
+            }
+
+            // Keep admin state on reload
+            if (sessionStorage.adminActive === "true") {
+                activateAdminMode();
             }
         });
 
@@ -1158,7 +1426,6 @@
             const categoriesSet = new Set(productsData.map(p => p.category));
             const container = document.getElementById('filter-pills-container');
             
-            // Clear existing except 'All'
             container.innerHTML = `
                 <button onclick="setFilterCategory('All')" class="category-pill active-pill px-4 py-2 bg-brand-orange text-white rounded-xl text-xs font-bold whitespace-nowrap transition-all">
                     All Categories
@@ -1178,7 +1445,6 @@
         function setFilterCategory(category, buttonElement) {
             selectedCategory = category;
             
-            // Update active pill UI classes
             const pills = document.querySelectorAll('.category-pill');
             pills.forEach(p => {
                 p.classList.remove('bg-brand-orange', 'text-white', 'active-pill');
@@ -1200,20 +1466,18 @@
             renderProductsGrid();
         }
 
-        // Main Render Loop for product list
+        // Main Render Loop for product list with robust image fallbacks
         function renderProductsGrid() {
             const searchInput = document.getElementById('live-product-search').value.toLowerCase();
             const grid = document.getElementById('product-grid');
             const emptyState = document.getElementById('no-products-found');
 
-            // Filter calculation logic
             const filtered = productsData.filter(product => {
                 const matchesCat = (selectedCategory === "All" || product.category === selectedCategory);
                 const matchesSearch = product.name.toLowerCase().includes(searchInput) || product.desc.toLowerCase().includes(searchInput);
                 return matchesCat && matchesSearch;
             });
 
-            // Clean Grid
             grid.innerHTML = "";
 
             if (filtered.length === 0) {
@@ -1227,13 +1491,29 @@
                     const card = document.createElement('div');
                     card.className = "bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between";
                     
+                    const cachedImage = imageCache[p.imgKey];
+                    const hasImage = cachedImage ? true : false;
+
                     card.innerHTML = `
                         <div>
-                            <div class="relative h-44 overflow-hidden group">
-                                <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x300/222222/ffffff?text=${encodeURIComponent(p.name)}'"/>
-                                <span class="absolute top-3 left-3 px-2.5 py-1 bg-brand-charcoal/90 backdrop-blur-md text-white rounded-lg text-[10px] font-bold tracking-wider uppercase">
-                                    <i class="${p.icon} text-brand-orange mr-1"></i> ${p.category}
-                                </span>
+                            <!-- Photo Spot Wrapper (Clickable in admin mode) -->
+                            <div class="admin-editable relative h-44 overflow-hidden group bg-slate-100 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800/50 flex flex-col justify-between p-3" onclick="triggerImageUpload('${p.imgKey}', event)">
+                                
+                                <img src="${hasImage ? cachedImage : ''}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 z-0 ${hasImage ? '' : 'hidden'}" id="img-${p.imgKey}"/>
+                                
+                                <div id="placeholder-${p.imgKey}" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-zinc-900 dark:to-zinc-800 ${hasImage ? 'hidden' : ''}">
+                                    <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mb-1">
+                                        <i class="fa-solid fa-camera text-base"></i>
+                                    </div>
+                                    <p class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center">Click / Upload Slot:</p>
+                                    <code class="text-[10px] bg-white dark:bg-zinc-950 px-1.5 py-0.5 rounded text-rose-500 font-mono font-bold mt-0.5">${p.imgKey}.jpg</code>
+                                </div>
+
+                                <div class="relative z-20 flex justify-between items-center w-full pointer-events-none">
+                                    <span class="px-2 py-1 bg-brand-charcoal/90 dark:bg-black/90 backdrop-blur-md text-white rounded-lg text-[9px] font-bold tracking-wider uppercase">
+                                        <i class="${p.icon} text-brand-orange mr-1"></i> ${p.category}
+                                    </span>
+                                </div>
                             </div>
                             <div class="p-5">
                                 <h3 class="font-extrabold text-slate-900 dark:text-white leading-tight">${p.name}</h3>
@@ -1249,6 +1529,103 @@
                     grid.appendChild(card);
                 });
             }
+        }
+
+        // Admin Master Trigger for File Uploads
+        function triggerImageUpload(key, event) {
+            if (!isAdminLoggedIn) return; // Ignore if not admin
+            event.stopPropagation();
+            selectedUploadKey = key;
+            document.getElementById("master-image-uploader").click();
+        }
+
+        // Handle uploaded master image file conversion
+        function handleMasterImageUploaded(event) {
+            const file = event.target.files[0];
+            if (!file || !selectedUploadKey) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                
+                // Save to local cache
+                imageCache[selectedUploadKey] = base64Data;
+
+                // Save permanently in IndexedDB Database
+                persistImageInDatabase(selectedUploadKey, base64Data);
+
+                // Instantly show on Screen
+                applyStoredImageToDOM(selectedUploadKey, base64Data);
+
+                // If it is product, re-render product grid to keep cache sync
+                if (selectedUploadKey.startsWith("product-")) {
+                    renderProductsGrid();
+                }
+
+                selectedUploadKey = null;
+                document.getElementById("master-image-uploader").value = ""; // clear file
+            }
+            reader.readAsDataURL(file);
+        }
+
+        // Database writer
+        function persistImageInDatabase(key, base64) {
+            if (!db) return;
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            store.put(base64, key);
+        }
+
+        // Database Clear Reset Action
+        function triggerResetAllImages() {
+            if (!confirm("Are you sure you want to delete all uploaded shop images? This will reset all photos to the guide frames.")) return;
+            
+            const tx = db.transaction(storeName, "readwrite");
+            const store = tx.objectStore(storeName);
+            const req = store.clear();
+            req.onsuccess = () => {
+                location.reload();
+            }
+        }
+
+        // Admin Panel Modals
+        function openAdminModal() {
+            document.getElementById("admin-login-modal").classList.remove("hidden");
+            document.getElementById("admin-password").focus();
+        }
+
+        function closeAdminModal() {
+            document.getElementById("admin-login-modal").classList.add("hidden");
+            document.getElementById("login-error-msg").classList.add("hidden");
+            document.getElementById("admin-password").value = "";
+        }
+
+        function handleAdminLoginSubmit(e) {
+            e.preventDefault();
+            const pass = document.getElementById("admin-password").value;
+            
+            if (pass === "admin123") {
+                activateAdminMode();
+                closeAdminModal();
+            } else {
+                document.getElementById("login-error-msg").classList.remove("hidden");
+            }
+        }
+
+        function activateAdminMode() {
+            isAdminLoggedIn = true;
+            sessionStorage.adminActive = "true";
+            document.body.classList.add("admin-mode-active");
+            document.getElementById("admin-status-banner").classList.remove("hidden");
+            renderProductsGrid(); // Refresh grid layout with upload outlines
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            sessionStorage.adminActive = "false";
+            document.body.classList.remove("admin-mode-active");
+            document.getElementById("admin-status-banner").classList.add("hidden");
+            renderProductsGrid(); // Refresh cards to normal visual profiles
         }
 
         // Quick WhatsApp click handle for specific products
@@ -1268,13 +1645,10 @@ Please send stock availability & latest bulk trade pricing rates!`;
             const val = document.getElementById('hero-search-input').value;
             document.getElementById('live-product-search').value = val;
             
-            // Scroll to catalog section
             const catSec = document.getElementById('categories');
             catSec.scrollIntoView({ behavior: 'smooth' });
             
-            // Set Category to All
             setFilterCategory('All');
-            // Trigger filter update
             filterProducts();
         }
 
@@ -1284,7 +1658,6 @@ Please send stock availability & latest bulk trade pricing rates!`;
             const width = parseFloat(document.getElementById('steel-width').value) || 0;
             const thickness = parseFloat(document.getElementById('steel-thickness').value) || 0;
             
-            // Carbon Steel Weight Equation = Length(m) * Width(m) * Thickness(mm) * Density (7.85 kg/m³)
             const weight = length * width * thickness * 7.85;
             
             document.getElementById('steel-weight-result').textContent = `${weight.toFixed(2)} kg`;
@@ -1295,8 +1668,6 @@ Please send stock availability & latest bulk trade pricing rates!`;
             const area = parseFloat(document.getElementById('paint-area').value) || 0;
             const coats = parseInt(document.getElementById('paint-coats').value) || 2;
             
-            // Standard high grade emulsion paint averages ~100 square feet per liter for double coat cover.
-            // (Calculated base: area / 100 * (coats / 2))
             const liters = Math.ceil((area / 100) * (coats / 2));
             
             document.getElementById('paint-result').textContent = `${liters > 0 ? liters : 0} Liters`;
@@ -1336,7 +1707,6 @@ I want to consult an expert regarding color shading and Asian Paints bulk discou
 
         // Interactive Masonry Gallery Filter Logic
         function filterGallery(category) {
-            // Update active state tab
             const tabs = document.querySelectorAll('.gallery-tab');
             tabs.forEach(tab => {
                 tab.classList.remove('bg-brand-orange', 'text-white', 'active-tab');
@@ -1386,7 +1756,7 @@ Please reply with a price estimate. Thank you!`;
                         counters.forEach(counter => {
                             const target = parseInt(counter.getAttribute('data-target'));
                             let count = 0;
-                            const speed = target / 50; // Dynamic scale steps
+                            const speed = target / 50;
                             
                             const updateCount = () => {
                                 count += speed;
