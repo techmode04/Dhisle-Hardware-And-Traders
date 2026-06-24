@@ -35,7 +35,7 @@
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -81,7 +81,7 @@
 
         /* Continuous Logo Marquee */
         @keyframes marquee {
-            0% { transform: translateX(0%); }
+            0 { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
         .marquee-track {
@@ -115,8 +115,8 @@
             opacity: 1;
         }
         body.admin-mode-active .admin-editable:hover::after {
-            background: rgba(255, 107, 0, 0.3);
-            content: 'Click to Change Image';
+            background: rgba(255, 107, 0, 0.35);
+            content: 'Click to Replace Photo';
             color: white;
             font-size: 11px;
             font-weight: 800;
@@ -149,7 +149,7 @@
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-2 animate-pulse">
                 <span class="w-2.5 h-2.5 rounded-full bg-green-400 inline-block"></span>
-                <span>ADMIN CONTROL PANEL ACTIVE — Click on any dashed frame to replace photos instantly!</span>
+                <span>ADMIN CONTROL PANEL ACTIVE — Changes sync to all devices instantly!</span>
             </div>
             <div class="flex items-center gap-4">
                 <button onclick="triggerResetAllImages()" class="bg-black/40 hover:bg-black/60 px-3 py-1 rounded-lg text-[10px] uppercase font-mono tracking-widest transition-all">
@@ -168,6 +168,10 @@
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-brand-orange"></i> Raimoha, Beed, Maharashtra</span>
                 <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-clock text-brand-orange"></i> Open Daily: 9:00 AM – 9:00 PM</span>
+                <span id="cloud-sync-badge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-800 text-[11px] text-zinc-300">
+                    <span class="w-2 h-2 rounded-full bg-yellow-400" id="cloud-sync-dot"></span>
+                    <span id="cloud-sync-text">Connecting Cloud...</span>
+                </span>
             </div>
             <div class="flex items-center gap-4">
                 <a href="tel:9359876866" class="hover:text-brand-orange transition-colors flex items-center gap-1.5">
@@ -191,8 +195,8 @@
                     <div id="logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg shadow-brand-orange/20 transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
                         <!-- Logo Upload Trigger -->
                         <div class="admin-editable w-full h-full flex items-center justify-center" onclick="triggerImageUpload('logo', event)">
-                            <img id="img-logo" src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('fallback-logo-icon').classList.remove('hidden');">
-                            <i id="fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
+                            <img id="img-logo" src="" class="w-full h-full object-cover hidden" alt="Dhisle Hardware Logo">
+                            <i id="fallback-logo-icon" class="fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
                         </div>
                     </div>
                     <div class="flex flex-col">
@@ -226,7 +230,7 @@
                 </button>
 
                 <!-- Premium Quote Button (Desktop) -->
-                <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-accent text-white px-5  py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-brand-orange/20 transition-all duration-300 hover:-translate-y-0.5">
+                <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-accent text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-brand-orange/20 transition-all duration-300 hover:-translate-y-0.5">
                     <i class="fa-solid fa-file-invoice-dollar"></i> Get Free Quote
                 </a>
 
@@ -350,7 +354,7 @@
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-2">
                                         <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Steel Photo</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Steel Photo</p>
                                     </div>
                                 </div>
                                 <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
@@ -369,7 +373,7 @@
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-1">
                                         <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Tools Photo</p>
+                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Tools Photo</p>
                                     </div>
                                 </div>
                                 <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
@@ -391,7 +395,7 @@
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-1">
                                         <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Paint Photo</p>
+                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Paint Photo</p>
                                     </div>
                                 </div>
                                 <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
@@ -410,7 +414,7 @@
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-2">
                                         <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click/Tap to Upload Agri Photo</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Agri Photo</p>
                                     </div>
                                 </div>
                                 <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
@@ -444,7 +448,7 @@
                             <div id="placeholder-owner" class="relative z-10 bg-white/95 dark:bg-zinc-900/95 p-3 rounded-xl border border-slate-200 dark:border-zinc-800 self-start text-xs font-semibold pointer-events-none">
                                 <span class="text-brand-orange font-bold uppercase tracking-wider block mb-1">📸 Shop Front / Owner Photo Guidance</span>
                                 <p class="text-slate-500 dark:text-slate-400 leading-normal">
-                                    Take a high-quality photo of your storefront, name the image <code class="font-bold bg-slate-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-rose-500">owner.png</code>, or click here to upload directly!
+                                    Take a high-quality photo of your storefront, and upload it here!
                                 </p>
                             </div>
 
@@ -810,7 +814,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Interior Showroom Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Interior Showroom Photo</p>
                         </div>
                     </div>
                     <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
@@ -828,7 +832,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Steel Yard Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Steel Yard Photo</p>
                         </div>
                     </div>
                     <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
@@ -846,7 +850,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Paint Section Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Paint Section Photo</p>
                         </div>
                     </div>
                     <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
@@ -864,7 +868,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Agri Stocks Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Agri Stocks Photo</p>
                         </div>
                     </div>
                     <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
@@ -882,7 +886,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Pipes / Fittings Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Pipes / Fittings Photo</p>
                         </div>
                     </div>
                     <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
@@ -900,7 +904,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click/Tap to Upload Construction Yard Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Construction Yard Photo</p>
                         </div>
                     </div>
                     <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
@@ -1151,8 +1155,8 @@
                 <div class="lg:col-span-5 space-y-4">
                     <div class="flex items-center gap-3">
                         <div id="footer-logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg flex items-center justify-center overflow-hidden">
-                            <img id="img-logo-footer" src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('footer-fallback-logo-icon').classList.remove('hidden');">
-                            <i id="footer-fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl"></i>
+                            <img id="img-logo-footer" src="" class="w-full h-full object-cover hidden" alt="Dhisle Hardware Logo">
+                            <i id="footer-fallback-logo-icon" class="fa-solid fa-cubes text-white text-xl"></i>
                         </div>
                         <div class="flex flex-col">
                             <span class="font-extrabold text-xl tracking-tight leading-none text-white">
@@ -1269,9 +1273,20 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC BLOCK -->
-    <script>
-        // Custom interactive products dataset
+    <!-- Firebase Modular Imports for Multi-device Cloud Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Constants & Configs
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dhisle-hardware-traders';
+        
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let firebaseInitialized = false;
+
         const productsData = [
             { id: 1, name: "Nuts & Bolts Assortment", category: "Hardware Items", desc: "Grade 8.8 high-tensile fasteners, bolts, and washers.", icon: "fa-solid fa-circle-nodes", imgKey: "product-1" },
             { id: 2, name: "Industrial Locks & Hinges", category: "Hardware Items", desc: "Heavy brass locks, hinges, and premium door hardware fittings.", icon: "fa-solid fa-key", imgKey: "product-2" },
@@ -1290,45 +1305,98 @@
         let selectedCategory = "All";
         let isAdminLoggedIn = false;
         let selectedUploadKey = null;
-
-        // LOCAL PERSISTENT STORAGE: Setup IndexedDB database
-        let db;
-        const dbName = "DhisleHardwareDB";
-        const storeName = "images";
         let imageCache = {};
 
-        const request = indexedDB.open(dbName, 1);
-        request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            db.createObjectStore(storeName);
-        };
-        request.onsuccess = (e) => {
-            db = e.target.result;
-            loadPersistedImages();
-        };
-        request.onerror = (e) => {
-            console.error("IndexedDB load error: ", e);
-            renderProductsGrid();
-        };
+        // Status Badge controls
+        function showCloudStatus(status) {
+            const badge = document.getElementById("cloud-sync-badge");
+            const dot = document.getElementById("cloud-sync-dot");
+            const text = document.getElementById("cloud-sync-text");
+            
+            if (!badge || !dot || !text) return;
 
-        // Load images from database and render on DOM
-        function loadPersistedImages() {
-            const tx = db.transaction(storeName, "readonly");
-            const store = tx.objectStore(storeName);
-            const req = store.openCursor();
-            req.onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) {
-                    imageCache[cursor.key] = cursor.value;
-                    applyStoredImageToDOM(cursor.key, cursor.value);
-                    cursor.continue();
-                } else {
-                    renderProductsGrid();
-                }
-            };
+            if (status === "connected") {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-green-500";
+                text.textContent = "Cloud Sync: Connected 🟢";
+                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-950/40 text-[11px] text-green-300 border border-green-900/30";
+            } else if (status === "offline") {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-zinc-500";
+                text.textContent = "Offline Mode (Local Only)";
+                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400";
+            } else if (status === "uploading") {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping";
+                text.textContent = "Syncing Upload...";
+                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-950/40 text-[11px] text-amber-300 border border-amber-900/30";
+            } else if (status === "error") {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                text.textContent = "Sync Error";
+                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-950/40 text-[11px] text-rose-300 border border-rose-900/30";
+            }
         }
 
-        // Apply loaded image to DOM based on key
+        async function initFirebaseAndAuth() {
+            if (typeof __firebase_config === 'undefined') {
+                console.warn("Firebase config not available. Cloud sync is disabled. Running locally.");
+                showCloudStatus("offline");
+                renderProductsGrid();
+                return;
+            }
+
+            try {
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // Rule 3: Auth first before doing anything
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const userCred = await signInWithCustomToken(auth, __initial_auth_token);
+                    currentUser = userCred.user;
+                } else {
+                    const userCred = await signInAnonymously(auth);
+                    currentUser = userCred.user;
+                }
+                
+                if (currentUser) {
+                    firebaseInitialized = true;
+                    showCloudStatus("connected");
+                    setupRealtimeImageSync();
+                }
+            } catch (err) {
+                console.error("Firebase Auth / Init Error:", err);
+                showCloudStatus("error");
+                renderProductsGrid(); // fallback to local rendering
+            }
+        }
+
+        function setupRealtimeImageSync() {
+            if (!firebaseInitialized || !db) return;
+
+            // Rule 1: Strict collection path reference
+            const imagesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'images');
+
+            onSnapshot(imagesCollection, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    const key = change.doc.id;
+                    if (change.type === "added" || change.type === "modified") {
+                        const docData = change.doc.data();
+                        const base64Data = docData.base64;
+                        
+                        imageCache[key] = base64Data;
+                        applyStoredImageToDOM(key, base64Data);
+                    } else if (change.type === "removed") {
+                        delete imageCache[key];
+                        resetImageOnDOM(key);
+                    }
+                });
+                // Re-render product grids dynamically
+                renderProductsGrid();
+            }, (error) => {
+                console.error("Error listening to image collection: ", error);
+                showCloudStatus("error");
+            });
+        }
+
         function applyStoredImageToDOM(key, base64Data) {
             const staticImg = document.getElementById("img-" + key);
             const placeholder = document.getElementById("placeholder-" + key);
@@ -1337,140 +1405,89 @@
             if (staticImg) {
                 staticImg.src = base64Data;
                 staticImg.classList.remove("hidden");
-                // Hide placeholders
                 if (placeholder) placeholder.classList.add("hidden");
                 if (key === 'owner' && ownerIcon) ownerIcon.classList.add("hidden");
             }
 
-            // Sync dual logos
             if (key === 'logo') {
                 const footerLogo = document.getElementById("img-logo-footer");
                 if (footerLogo) {
                     footerLogo.src = base64Data;
                     footerLogo.classList.remove("hidden");
                 }
+                const headerFallback = document.getElementById("fallback-logo-icon");
+                if (headerFallback) headerFallback.classList.add("hidden");
+                const footerFallback = document.getElementById("footer-fallback-logo-icon");
+                if (footerFallback) footerFallback.classList.add("hidden");
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Remove Page Loader
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.classList.add('opacity-0');
-                setTimeout(() => loader.style.display = 'none', 500);
-            }, 800);
+        function showUploadLoading(key) {
+            const staticImg = document.getElementById("img-" + key);
+            const placeholder = document.getElementById("placeholder-" + key);
+            let container = null;
+            if (staticImg) container = staticImg.parentElement;
+            else if (placeholder) container = placeholder.parentElement;
 
-            // Populate Filter Pills Dynamic Creation
-            generateCategoryFilterPills();
-
-            // Trigger statistics animation observer
-            setupStatsCounterObserver();
-
-            // Handle Light / Dark Theme on load
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
+            if (container) {
+                let overlay = container.querySelector(".upload-sync-overlay");
+                if (!overlay) {
+                    overlay = document.createElement("div");
+                    overlay.className = "upload-sync-overlay absolute inset-0 bg-black/75 z-40 flex flex-col items-center justify-center text-white text-xs font-bold gap-2";
+                    overlay.innerHTML = `<div class="w-6 h-6 border-2 border-t-brand-orange border-r-transparent rounded-full animate-spin"></div><span>Uploading to Cloud...</span>`;
+                    container.appendChild(overlay);
+                }
             }
-
-            // Keep admin state on reload
-            if (sessionStorage.adminActive === "true") {
-                activateAdminMode();
-            }
-        });
-
-        // Sticky Nav shrink effect & show Back to Top button
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('main-header');
-            const topBtn = document.getElementById('back-to-top');
-            
-            if (window.scrollY > 120) {
-                header.classList.add('shadow-md', 'h-16');
-                header.classList.remove('h-20');
-                topBtn.classList.remove('hidden');
-                topBtn.classList.add('flex');
-            } else {
-                header.classList.remove('shadow-md', 'h-16');
-                header.classList.add('h-20');
-                topBtn.classList.add('hidden');
-                topBtn.classList.remove('flex');
-            }
-        });
-
-        // Theme Toggle Handler
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
-            }
-        });
-
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-
-        // Close Mobile Menu on clicking links
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobile-menu').classList.add('hidden');
-            });
-        });
-
-        // Generate Unique Categories from Dataset
-        function generateCategoryFilterPills() {
-            const categoriesSet = new Set(productsData.map(p => p.category));
-            const container = document.getElementById('filter-pills-container');
-            
-            container.innerHTML = `
-                <button onclick="setFilterCategory('All')" class="category-pill active-pill px-4 py-2 bg-brand-orange text-white rounded-xl text-xs font-bold whitespace-nowrap transition-all">
-                    All Categories
-                </button>
-            `;
-
-            categoriesSet.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.className = "category-pill px-4 py-2 bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-brand-orange hover:text-white";
-                btn.textContent = cat;
-                btn.onclick = () => setFilterCategory(cat, btn);
-                container.appendChild(btn);
-            });
         }
 
-        // Filter Categories Handler
-        function setFilterCategory(category, buttonElement) {
-            selectedCategory = category;
-            
-            const pills = document.querySelectorAll('.category-pill');
-            pills.forEach(p => {
-                p.classList.remove('bg-brand-orange', 'text-white', 'active-pill');
-                p.classList.add('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
-            });
+        function hideUploadLoading(key) {
+            const staticImg = document.getElementById("img-" + key);
+            const placeholder = document.getElementById("placeholder-" + key);
+            let container = null;
+            if (staticImg) container = staticImg.parentElement;
+            else if (placeholder) container = placeholder.parentElement;
 
-            if (buttonElement) {
-                buttonElement.classList.add('bg-brand-orange', 'text-white', 'active-pill');
-                buttonElement.classList.remove('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
-            } else {
-                pills[0].classList.add('bg-brand-orange', 'text-white', 'active-pill');
+            if (container) {
+                const overlay = container.querySelector(".upload-sync-overlay");
+                if (overlay) overlay.remove();
             }
-
-            renderProductsGrid();
         }
 
-        // Live Search Input handler
-        function filterProducts() {
-            renderProductsGrid();
+        function resetImageOnDOM(key) {
+            const staticImg = document.getElementById("img-" + key);
+            const placeholder = document.getElementById("placeholder-" + key);
+            const ownerIcon = document.getElementById("placeholder-owner-icon");
+
+            if (staticImg) {
+                staticImg.src = "";
+                staticImg.classList.add("hidden");
+            }
+            if (placeholder) {
+                placeholder.classList.remove("hidden");
+            }
+            if (key === 'owner' && ownerIcon) {
+                ownerIcon.classList.remove("hidden");
+            }
+            if (key === 'logo') {
+                const footerLogo = document.getElementById("img-logo-footer");
+                if (footerLogo) {
+                    footerLogo.src = "";
+                    footerLogo.classList.add("hidden");
+                }
+                const headerFallback = document.getElementById("fallback-logo-icon");
+                if (headerFallback) headerFallback.classList.remove("hidden");
+                const footerFallback = document.getElementById("footer-fallback-logo-icon");
+                if (footerFallback) footerFallback.classList.remove("hidden");
+            }
         }
 
-        // Main Render Loop for product list with robust image fallbacks
         function renderProductsGrid() {
-            const searchInput = document.getElementById('live-product-search').value.toLowerCase();
+            const searchInputObj = document.getElementById('live-product-search');
+            const searchInput = searchInputObj ? searchInputObj.value.toLowerCase() : "";
             const grid = document.getElementById('product-grid');
             const emptyState = document.getElementById('no-products-found');
+
+            if (!grid) return;
 
             const filtered = productsData.filter(product => {
                 const matchesCat = (selectedCategory === "All" || product.category === selectedCategory);
@@ -1481,15 +1498,15 @@
             grid.innerHTML = "";
 
             if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
+                if (emptyState) emptyState.classList.remove('hidden');
                 grid.classList.add('hidden');
             } else {
-                emptyState.classList.add('hidden');
+                if (emptyState) emptyState.classList.add('hidden');
                 grid.classList.remove('hidden');
 
                 filtered.forEach(p => {
                     const card = document.createElement('div');
-                    card.className = "bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between";
+                    card.className = "bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between relative";
                     
                     const cachedImage = imageCache[p.imgKey];
                     const hasImage = cachedImage ? true : false;
@@ -1505,7 +1522,7 @@
                                     <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mb-1">
                                         <i class="fa-solid fa-camera text-base"></i>
                                     </div>
-                                    <p class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center">Click / Upload Slot:</p>
+                                    <p class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center">Click/Upload Slot:</p>
                                     <code class="text-[10px] bg-white dark:bg-zinc-950 px-1.5 py-0.5 rounded text-rose-500 font-mono font-bold mt-0.5">${p.imgKey}.jpg</code>
                                 </div>
 
@@ -1531,64 +1548,121 @@
             }
         }
 
-        // Admin Master Trigger for File Uploads
         function triggerImageUpload(key, event) {
-            if (!isAdminLoggedIn) return; // Ignore if not admin
+            if (!isAdminLoggedIn) return; 
             event.stopPropagation();
             selectedUploadKey = key;
             document.getElementById("master-image-uploader").click();
         }
 
-        // Handle uploaded master image file conversion
         function handleMasterImageUploaded(event) {
             const file = event.target.files[0];
             if (!file || !selectedUploadKey) return;
 
+            showUploadLoading(selectedUploadKey);
+            showCloudStatus("uploading");
+
             const reader = new FileReader();
             reader.onload = function(e) {
-                const base64Data = e.target.result;
-                
-                // Save to local cache
-                imageCache[selectedUploadKey] = base64Data;
-
-                // Save permanently in IndexedDB Database
-                persistImageInDatabase(selectedUploadKey, base64Data);
-
-                // Instantly show on Screen
-                applyStoredImageToDOM(selectedUploadKey, base64Data);
-
-                // If it is product, re-render product grid to keep cache sync
-                if (selectedUploadKey.startsWith("product-")) {
-                    renderProductsGrid();
-                }
-
-                selectedUploadKey = null;
-                document.getElementById("master-image-uploader").value = ""; // clear file
-            }
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // Dynamic boundaries for high definition but extremely lightweight images (max width: 800px)
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 600;
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Compress to lightweight high quality JPG (0.6 quality gives perfect balances)
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.65);
+                    
+                    uploadToCloudDatabase(selectedUploadKey, compressedBase64);
+                };
+                img.src = e.target.result;
+            };
             reader.readAsDataURL(file);
         }
 
-        // Database writer
-        function persistImageInDatabase(key, base64) {
-            if (!db) return;
-            const tx = db.transaction(storeName, "readwrite");
-            const store = tx.objectStore(storeName);
-            store.put(base64, key);
+        async function uploadToCloudDatabase(key, base64String) {
+            if (!firebaseInitialized || !db) {
+                // Fallback to local image caching if database configurations are absent
+                imageCache[key] = base64String;
+                applyStoredImageToDOM(key, base64String);
+                renderProductsGrid();
+                hideUploadLoading(key);
+                showCloudStatus("offline");
+                selectedUploadKey = null;
+                document.getElementById("master-image-uploader").value = "";
+                return;
+            }
+
+            try {
+                // Rule 1: Strict paths compliant
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'images', key);
+                await setDoc(docRef, {
+                    base64: base64String,
+                    updatedAt: new Date().getTime()
+                });
+
+                showCloudStatus("connected");
+                hideUploadLoading(key);
+            } catch (err) {
+                console.error("Cloud upload error: ", err);
+                showCloudStatus("error");
+                hideUploadLoading(key);
+            }
+
+            selectedUploadKey = null;
+            document.getElementById("master-image-uploader").value = "";
         }
 
-        // Database Clear Reset Action
-        function triggerResetAllImages() {
-            if (!confirm("Are you sure you want to delete all uploaded shop images? This will reset all photos to the guide frames.")) return;
+        async function triggerResetAllImages() {
+            if (!confirm("Are you sure you want to delete all uploaded shop images across all devices? This will reset all photos to the upload guide frames.")) return;
             
-            const tx = db.transaction(storeName, "readwrite");
-            const store = tx.objectStore(storeName);
-            const req = store.clear();
-            req.onsuccess = () => {
-                location.reload();
+            showCloudStatus("uploading");
+            
+            const staticKeys = [
+                'logo', 'owner', 'hero-steel', 'hero-tools', 'hero-paints', 'hero-agri',
+                'gallery-interior', 'gallery-steel', 'gallery-paint', 'gallery-agri', 'gallery-plumbing', 'gallery-yard'
+            ];
+            
+            const productKeys = productsData.map(p => p.imgKey);
+            const allKeys = [...staticKeys, ...productKeys];
+
+            if (firebaseInitialized && db) {
+                for (const key of allKeys) {
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'images', key);
+                        await deleteDoc(docRef);
+                    } catch (e) {
+                        console.error("Resetting key error:", key, e);
+                    }
+                }
+                showCloudStatus("connected");
+            } else {
+                imageCache = {};
+                allKeys.forEach(key => resetImageOnDOM(key));
+                renderProductsGrid();
+                showCloudStatus("offline");
             }
         }
 
-        // Admin Panel Modals
         function openAdminModal() {
             document.getElementById("admin-login-modal").classList.remove("hidden");
             document.getElementById("admin-password").focus();
@@ -1617,7 +1691,7 @@
             sessionStorage.adminActive = "true";
             document.body.classList.add("admin-mode-active");
             document.getElementById("admin-status-banner").classList.remove("hidden");
-            renderProductsGrid(); // Refresh grid layout with upload outlines
+            renderProductsGrid(); 
         }
 
         function logoutAdmin() {
@@ -1625,10 +1699,32 @@
             sessionStorage.adminActive = "false";
             document.body.classList.remove("admin-mode-active");
             document.getElementById("admin-status-banner").classList.add("hidden");
-            renderProductsGrid(); // Refresh cards to normal visual profiles
+            renderProductsGrid(); 
         }
 
-        // Quick WhatsApp click handle for specific products
+        function setFilterCategory(category, buttonElement) {
+            selectedCategory = category;
+            
+            const pills = document.querySelectorAll('.category-pill');
+            pills.forEach(p => {
+                p.classList.remove('bg-brand-orange', 'text-white', 'active-pill');
+                p.classList.add('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
+            });
+
+            if (buttonElement) {
+                buttonElement.classList.add('bg-brand-orange', 'text-white', 'active-pill');
+                buttonElement.classList.remove('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
+            } else {
+                pills[0].classList.add('bg-brand-orange', 'text-white', 'active-pill');
+            }
+
+            renderProductsGrid();
+        }
+
+        function filterProducts() {
+            renderProductsGrid();
+        }
+
         function initiateQuickWhatsAppInquiry(productName, category) {
             const phone = "919359876866";
             const text = `Hello Dhisle Hardware! I was browsing your redesigned web catalog and would like to request a trade quote for:
@@ -1640,19 +1736,18 @@ Please send stock availability & latest bulk trade pricing rates!`;
             window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
         }
 
-        // Quick search trigger from hero
         function scrollToProductsAndSearch() {
             const val = document.getElementById('hero-search-input').value;
-            document.getElementById('live-product-search').value = val;
+            const liveSearch = document.getElementById('live-product-search');
+            if (liveSearch) liveSearch.value = val;
             
             const catSec = document.getElementById('categories');
-            catSec.scrollIntoView({ behavior: 'smooth' });
+            if (catSec) catSec.scrollIntoView({ behavior: 'smooth' });
             
             setFilterCategory('All');
             filterProducts();
         }
 
-        // Steel Weight Estimation Calculator Formula
         function calculateSteelWeight() {
             const length = parseFloat(document.getElementById('steel-length').value) || 0;
             const width = parseFloat(document.getElementById('steel-width').value) || 0;
@@ -1663,7 +1758,6 @@ Please send stock availability & latest bulk trade pricing rates!`;
             document.getElementById('steel-weight-result').textContent = `${weight.toFixed(2)} kg`;
         }
 
-        // Paint Coverage Estimator Formula
         function calculatePaint() {
             const area = parseFloat(document.getElementById('paint-area').value) || 0;
             const coats = parseInt(document.getElementById('paint-coats').value) || 2;
@@ -1673,7 +1767,6 @@ Please send stock availability & latest bulk trade pricing rates!`;
             document.getElementById('paint-result').textContent = `${liters > 0 ? liters : 0} Liters`;
         }
 
-        // Steel Weight WhatsApp redirection
         function requestSteelQuote() {
             const length = document.getElementById('steel-length').value;
             const width = document.getElementById('steel-width').value;
@@ -1690,7 +1783,6 @@ Please send pricing and dispatch availability of MS Steel sheets.`;
             window.open(`https://wa.me/919359876866?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        // Paint coverage WhatsApp redirection
         function requestPaintQuote() {
             const area = document.getElementById('paint-area').value;
             const coats = document.getElementById('paint-coats').value;
@@ -1705,7 +1797,6 @@ I want to consult an expert regarding color shading and Asian Paints bulk discou
             window.open(`https://wa.me/919359876866?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        // Interactive Masonry Gallery Filter Logic
         function filterGallery(category) {
             const tabs = document.querySelectorAll('.gallery-tab');
             tabs.forEach(tab => {
@@ -1723,7 +1814,6 @@ I want to consult an expert regarding color shading and Asian Paints bulk discou
             });
         }
 
-        // Complete WhatsApp Quote Builder Form Submission Handler
         function sendWhatsAppQuoteForm(e) {
             e.preventDefault();
 
@@ -1747,7 +1837,6 @@ Please reply with a price estimate. Thank you!`;
             window.open(`https://wa.me/919359876866?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // Statistics Counter Intersection Observer Trigger
         function setupStatsCounterObserver() {
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -1774,8 +1863,129 @@ Please reply with a price estimate. Thank you!`;
                 });
             }, { threshold: 0.1 });
 
-            observer.observe(document.getElementById('stats-grid'));
+            const statsGrid = document.getElementById('stats-grid');
+            if (statsGrid) observer.observe(statsGrid);
         }
+
+        window.openAdminModal = openAdminModal;
+        window.closeAdminModal = closeAdminModal;
+        window.handleAdminLoginSubmit = handleAdminLoginSubmit;
+        window.activateAdminMode = activateAdminMode;
+        window.logoutAdmin = logoutAdmin;
+        window.triggerImageUpload = triggerImageUpload;
+        window.handleMasterImageUploaded = handleMasterImageUploaded;
+        window.triggerResetAllImages = triggerResetAllImages;
+        window.setFilterCategory = setFilterCategory;
+        window.filterProducts = filterProducts;
+        window.initiateQuickWhatsAppInquiry = initiateQuickWhatsAppInquiry;
+        window.scrollToProductsAndSearch = scrollToProductsAndSearch;
+        window.calculateSteelWeight = calculateSteelWeight;
+        window.calculatePaint = calculatePaint;
+        window.requestSteelQuote = requestSteelQuote;
+        window.requestPaintQuote = requestPaintQuote;
+        window.filterGallery = filterGallery;
+        window.sendWhatsAppQuoteForm = sendWhatsAppQuoteForm;
+
+        // Dom Ready Callbacks
+        window.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                if (loader) {
+                    loader.classList.add('opacity-0');
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }
+            }, 800);
+
+            // Fetch dynamic categories
+            const categoriesSet = new Set(productsData.map(p => p.category));
+            const container = document.getElementById('filter-pills-container');
+            if (container) {
+                container.innerHTML = `
+                    <button onclick="setFilterCategory('All')" class="category-pill active-pill px-4 py-2 bg-brand-orange text-white rounded-xl text-xs font-bold whitespace-nowrap transition-all">
+                        All Categories
+                    </button>
+                `;
+                categoriesSet.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = "category-pill px-4 py-2 bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-brand-orange hover:text-white";
+                    btn.textContent = cat;
+                    btn.onclick = () => setFilterCategory(cat, btn);
+                    container.appendChild(btn);
+                });
+            }
+
+            setupStatsCounterObserver();
+
+            // Set default dark/light state
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            if (sessionStorage.adminActive === "true") {
+                activateAdminMode();
+            }
+
+            // Init Firebase Cloud sync loop!
+            initFirebaseAndAuth();
+        });
+
+        // Shrinking nav header & Back to Top triggers
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            const topBtn = document.getElementById('back-to-top');
+            
+            if (window.scrollY > 120) {
+                if (header) {
+                    header.classList.add('shadow-md', 'h-16');
+                    header.classList.remove('h-20');
+                }
+                if (topBtn) {
+                    topBtn.classList.remove('hidden');
+                    topBtn.classList.add('flex');
+                }
+            } else {
+                if (header) {
+                    header.classList.remove('shadow-md', 'h-16');
+                    header.classList.add('h-20');
+                }
+                if (topBtn) {
+                    topBtn.classList.add('hidden');
+                    topBtn.classList.remove('flex');
+                }
+            }
+        });
+
+        // Theme changer
+        const themeBtn = document.getElementById('theme-toggle');
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            });
+        }
+
+        // Mobile layout interactions
+        const mBtn = document.getElementById('mobile-menu-btn');
+        if (mBtn) {
+            mBtn.addEventListener('click', () => {
+                const menu = document.getElementById('mobile-menu');
+                if (menu) menu.classList.toggle('hidden');
+            });
+        }
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const menu = document.getElementById('mobile-menu');
+                if (menu) menu.classList.add('hidden');
+            });
+        });
     </script>
 </body>
 </html>
