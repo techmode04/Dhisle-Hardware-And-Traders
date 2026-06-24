@@ -35,7 +35,7 @@
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -81,7 +81,7 @@
 
         /* Continuous Logo Marquee */
         @keyframes marquee {
-            0 { transform: translateX(0%); }
+            0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
         }
         .marquee-track {
@@ -91,41 +91,6 @@
         }
         .marquee-track:hover {
             animation-play-state: paused;
-        }
-
-        /* Admin Interactive Highlights */
-        .admin-editable {
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        .admin-editable::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255, 107, 0, 0.15);
-            border: 2px dashed #ff6b00;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-            border-radius: inherit;
-            z-index: 30;
-        }
-        body.admin-mode-active .admin-editable::after {
-            opacity: 1;
-        }
-        body.admin-mode-active .admin-editable:hover::after {
-            background: rgba(255, 107, 0, 0.35);
-            content: 'Click to Replace Photo';
-            color: white;
-            font-size: 11px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -141,46 +106,17 @@
         </div>
     </div>
 
-    <!-- Hidden Master Image Uploader Input -->
-    <input type="file" id="master-image-uploader" accept="image/*" class="hidden" onchange="handleMasterImageUploaded(event)" />
-
-    <!-- Admin Management Header Banner -->
-    <div id="admin-status-banner" class="hidden bg-gradient-to-r from-amber-600 via-brand-orange to-red-600 text-white px-4 py-2.5 text-xs md:text-sm font-extrabold shadow-lg sticky top-0 z-[60] border-b border-orange-500">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-2 animate-pulse">
-                <span class="w-2.5 h-2.5 rounded-full bg-green-400 inline-block"></span>
-                <span>ADMIN CONTROL PANEL ACTIVE — Changes sync to all devices instantly!</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <button onclick="triggerResetAllImages()" class="bg-black/40 hover:bg-black/60 px-3 py-1 rounded-lg text-[10px] uppercase font-mono tracking-widest transition-all">
-                    Reset All Photos
-                </button>
-                <button onclick="logoutAdmin()" class="bg-white text-brand-charcoal hover:bg-zinc-100 px-4 py-1 rounded-lg shadow-md transition-all">
-                    Exit Admin Mode <i class="fa-solid fa-right-from-bracket ml-1"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Top Alert/Info Bar -->
-    <div class="bg-brand-charcoal dark:bg-black text-white py-2 px-4 text-xs md:text-sm font-medium border-b border-zinc-800 relative z-40">
+    <div class="bg-brand-charcoal dark:bg-black text-white py-2 px-4 text-xs md:text-sm font-medium border-b border-zinc-800">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-4">
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-brand-orange"></i> Raimoha, Beed, Maharashtra</span>
                 <span class="hidden md:inline-flex items-center gap-1.5"><i class="fa-solid fa-clock text-brand-orange"></i> Open Daily: 9:00 AM – 9:00 PM</span>
-                <span id="cloud-sync-badge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-800 text-[11px] text-zinc-300">
-                    <span class="w-2 h-2 rounded-full bg-yellow-400" id="cloud-sync-dot"></span>
-                    <span id="cloud-sync-text">Connecting Cloud...</span>
-                </span>
             </div>
             <div class="flex items-center gap-4">
                 <a href="tel:9359876866" class="hover:text-brand-orange transition-colors flex items-center gap-1.5">
                     <i class="fa-solid fa-phone text-brand-orange"></i> +91 9359876866
                 </a>
-                <!-- Admin Lock Trigger -->
-                <button onclick="openAdminModal()" class="text-zinc-400 hover:text-brand-orange transition-colors flex items-center gap-1 px-2 py-0.5 rounded border border-zinc-800 bg-zinc-900/50">
-                    <i class="fa-solid fa-lock text-[10px]"></i> Admin Portal
-                </button>
             </div>
         </div>
     </div>
@@ -193,11 +129,9 @@
             <div class="flex items-center gap-2">
                 <a href="#" class="flex items-center gap-3 group focus:outline-none">
                     <div id="logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg shadow-brand-orange/20 transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
-                        <!-- Logo Upload Trigger -->
-                        <div class="admin-editable w-full h-full flex items-center justify-center" onclick="triggerImageUpload('logo', event)">
-                            <img id="img-logo" src="" class="w-full h-full object-cover hidden" alt="Dhisle Hardware Logo">
-                            <i id="fallback-logo-icon" class="fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
-                        </div>
+                        <!-- Smart Image Loader: If logo.png is missing, it shows a beautiful SVG hardware icon seamlessly -->
+                        <img src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('fallback-logo-icon').classList.remove('hidden');">
+                        <i id="fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
                     </div>
                     <div class="flex flex-col">
                         <span class="font-extrabold text-lg md:text-xl lg:text-2xl tracking-tight leading-none text-brand-charcoal dark:text-white group-hover:text-brand-orange transition-colors">
@@ -230,7 +164,7 @@
                 </button>
 
                 <!-- Premium Quote Button (Desktop) -->
-                <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-accent text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-brand-orange/20 transition-all duration-300 hover:-translate-y-0.5">
+                <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-accent text-white px-5  py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-brand-orange/20 transition-all duration-300 hover:-translate-y-0.5">
                     <i class="fa-solid fa-file-invoice-dollar"></i> Get Free Quote
                 </a>
 
@@ -345,40 +279,41 @@
                         <!-- Column 1: Steel Structure & Handtools -->
                         <div class="space-y-4">
                             <!-- Card 1: Steel Structure -->
-                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4" onclick="triggerImageUpload('hero-steel', event)">
-                                <img id="img-hero-steel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4">
+                                <!-- Background Image Loader (Fails gracefully to instructions) -->
+                                <img src="hero-steel.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
                                 
-                                <div id="placeholder-hero-steel" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
                                     <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold text-rose-500">hero-steel.jpg</span>
+                                        File: <span class="font-bold">hero-steel.jpg</span>
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-2">
                                         <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Steel Photo</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold">Add Steel Photo</p>
                                     </div>
-                                </div>
-                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
-                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Heavy Duty</span>
-                                    <h3 class="font-bold text-xs">Industrial Steel & Pipes</h3>
+                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
+                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Heavy Duty</span>
+                                        <h3 class="font-bold text-xs">Industrial Steel & Pipes</h3>
+                                    </div>
                                 </div>
                             </div>
                             
                             <!-- Card 2: Hardware Handtools -->
-                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4" onclick="triggerImageUpload('hero-tools', event)">
-                                <img id="img-hero-tools" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4">
+                                <img src="hero-tools.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
                                 
-                                <div id="placeholder-hero-tools" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
                                     <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold text-rose-500">hero-tools.jpg</span>
+                                        File: <span class="font-bold">hero-tools.jpg</span>
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-1">
                                         <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Tools Photo</p>
+                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold">Add Tools Photo</p>
                                     </div>
-                                </div>
-                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
-                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Hardware Store</span>
-                                    <h3 class="font-bold text-xs">Premium Tools</h3>
+                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
+                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Hardware Store</span>
+                                        <h3 class="font-bold text-xs">Premium Tools</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -386,40 +321,40 @@
                         <!-- Column 2: Paints & Farming -->
                         <div class="space-y-4 pt-8">
                             <!-- Card 3: Paints & Brushes -->
-                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4" onclick="triggerImageUpload('hero-paints', event)">
-                                <img id="img-hero-paints" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4">
+                                <img src="hero-paints.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
                                 
-                                <div id="placeholder-hero-paints" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
                                     <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold text-rose-500">hero-paints.jpg</span>
+                                        File: <span class="font-bold">hero-paints.jpg</span>
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-1">
                                         <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Paint Photo</p>
+                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold">Add Paint Photo</p>
                                     </div>
-                                </div>
-                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
-                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Vibrant Homes</span>
-                                    <h3 class="font-bold text-xs">Asian & Berger Paints</h3>
+                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
+                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Vibrant Homes</span>
+                                        <h3 class="font-bold text-xs">Asian & Berger Paints</h3>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Card 4: Agriculture Pumps -->
-                            <div class="admin-editable relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4" onclick="triggerImageUpload('hero-agri', event)">
-                                <img id="img-hero-agri" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0 hidden" alt="" />
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4">
+                                <img src="hero-agri.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
                                 
-                                <div id="placeholder-hero-agri" class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
+                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
                                     <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold text-rose-500">hero-agri.jpg</span>
+                                        File: <span class="font-bold">hero-agri.jpg</span>
                                     </div>
                                     <div class="flex flex-col items-center justify-center my-auto py-2">
                                         <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold text-center">Click to Upload Agri Photo</p>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold">Add Agri Photo</p>
                                     </div>
-                                </div>
-                                <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto relative z-20 pointer-events-none">
-                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Farming Tools</span>
-                                    <h3 class="font-bold text-xs">Irrigation & Pump Sets</h3>
+                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
+                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Farming Tools</span>
+                                        <h3 class="font-bold text-xs">Irrigation & Pump Sets</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -442,21 +377,16 @@
                     <div class="relative border-4 border-slate-100 dark:border-zinc-800 rounded-3xl p-6 overflow-hidden bg-slate-50 dark:bg-zinc-900 shadow-xl">
                         
                         <!-- Owner/Shop Showcase Picture Placeholder -->
-                        <div class="admin-editable relative rounded-2xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-zinc-700 bg-slate-200/40 dark:bg-zinc-800/40 h-[380px] w-full flex flex-col justify-between p-6" onclick="triggerImageUpload('owner', event)">
-                            <img id="img-owner" alt="Dhisle Hardware Storefront" class="absolute inset-0 rounded-2xl w-full h-full object-cover hidden" />
+                        <div class="relative rounded-2xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-zinc-700 bg-slate-200/40 dark:bg-zinc-800/40 h-[380px] w-full flex flex-col justify-between p-6">
+                            <img src="owner.png" alt="Dhisle Hardware Storefront" class="absolute inset-0 rounded-2xl w-full h-full object-cover" onerror="this.style.display='none';">
                             
-                            <div id="placeholder-owner" class="relative z-10 bg-white/95 dark:bg-zinc-900/95 p-3 rounded-xl border border-slate-200 dark:border-zinc-800 self-start text-xs font-semibold pointer-events-none">
-                                <span class="text-brand-orange font-bold uppercase tracking-wider block mb-1">📸 Shop Front / Owner Photo Guidance</span>
-                                <p class="text-slate-500 dark:text-slate-400 leading-normal">
-                                    Take a high-quality photo of your storefront, and upload it here!
-                                </p>
-                            </div>
+                        
 
-                            <div id="placeholder-owner-icon" class="relative z-10 flex flex-col items-center justify-center my-auto pointer-events-none">
+                            <div class="relative z-10 flex flex-col items-center justify-center my-auto">
                                 <div class="w-16 h-16 rounded-full bg-brand-orange/10 dark:bg-brand-orange/20 flex items-center justify-center text-brand-orange mb-3 animate-bounce">
                                     <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
                                 </div>
-                                <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">Click to Upload "owner.png"</span>
+                                <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">Save Photo as "owner.png"</span>
                                 <span class="text-xs text-slate-400 dark:text-zinc-500 mt-1">Recommended size: 800 x 600 px</span>
                             </div>
                         </div>
@@ -806,110 +736,110 @@
             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
                 
                 <!-- Gallery Card 1: Interior -->
-                <div class="admin-editable gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-interior', event)">
-                    <img id="img-gallery-interior" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
-                    <div id="placeholder-gallery-interior" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
+                    <img src="gallery-interior.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
+                    <div class="relative z-10 flex flex-col justify-between h-full">
                         <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
                             Save as: <span class="text-rose-500 font-bold">gallery-interior.jpg</span>
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Interior Showroom Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Interior Showroom Photo</p>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
-                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Interior Showroom</span>
-                        <h4 class="font-extrabold text-sm mt-0.5">Premium Hardware Counters</h4>
+                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Interior Showroom</span>
+                            <h4 class="font-extrabold text-sm mt-0.5">Premium Hardware Counters</h4>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gallery Card 2: Steel -->
-                <div class="admin-editable gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-steel', event)">
-                    <img id="img-gallery-steel" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
-                    <div id="placeholder-gallery-steel" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
+                    <img src="gallery-steel.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
+                    <div class="relative z-10 flex flex-col justify-between h-full">
                         <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
                             Save as: <span class="text-rose-500 font-bold">gallery-steel.jpg</span>
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Steel Yard Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Steel Yard Photo</p>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
-                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Steel Yard</span>
-                        <h4 class="font-extrabold text-sm mt-0.5">Structural Sections Stock</h4>
+                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Steel Yard</span>
+                            <h4 class="font-extrabold text-sm mt-0.5">Structural Sections Stock</h4>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gallery Card 3: Paints -->
-                <div class="admin-editable gallery-item paint relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-paint', event)">
-                    <img id="img-gallery-paint" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
-                    <div id="placeholder-gallery-paint" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                <div class="gallery-item paint relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
+                    <img src="gallery-paint.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
+                    <div class="relative z-10 flex flex-col justify-between h-full">
                         <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
                             Save as: <span class="text-rose-500 font-bold">gallery-paint.jpg</span>
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Paint Section Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Paint Section Photo</p>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
-                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Paints Section</span>
-                        <h4 class="font-extrabold text-sm mt-0.5">Computerized Mixing Machine</h4>
+                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Paints Section</span>
+                            <h4 class="font-extrabold text-sm mt-0.5">Computerized Mixing Machine</h4>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gallery Card 4: Agri -->
-                <div class="admin-editable gallery-item agri relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-agri', event)">
-                    <img id="img-gallery-agri" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
-                    <div id="placeholder-gallery-agri" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                <div class="gallery-item agri relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
+                    <img src="gallery-agri.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
+                    <div class="relative z-10 flex flex-col justify-between h-full">
                         <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
                             Save as: <span class="text-rose-500 font-bold">gallery-agri.jpg</span>
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Agri Stocks Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Agri Stocks Photo</p>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
-                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Agricultural Stocks</span>
-                        <h4 class="font-extrabold text-sm mt-0.5">High-Pressure Spray Pumps</h4>
+                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Agricultural Stocks</span>
+                            <h4 class="font-extrabold text-sm mt-0.5">High-Pressure Spray Pumps</h4>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gallery Card 5: Plumbing/Pipes -->
-                <div class="admin-editable gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-plumbing', event)">
-                    <img id="img-gallery-plumbing" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
-                    <div id="placeholder-gallery-plumbing" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
+                    <img src="gallery-plumbing.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
+                    <div class="relative z-10 flex flex-col justify-between h-full">
                         <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
                             Save as: <span class="text-rose-500 font-bold">gallery-plumbing.jpg</span>
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Pipes / Fittings Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Pipes / Fittings Photo</p>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
-                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Pipes & Fittings</span>
-                        <h4 class="font-extrabold text-sm mt-0.5">CPVC & PVC Connectors</h4>
+                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Pipes & Fittings</span>
+                            <h4 class="font-extrabold text-sm mt-0.5">CPVC & PVC Connectors</h4>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Gallery Card 6: Construction Yard / Tools -->
-                <div class="admin-editable gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between" onclick="triggerImageUpload('gallery-yard', event)">
-                    <img id="img-gallery-yard" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 hidden" alt="" />
-                    <div id="placeholder-gallery-yard" class="relative z-10 flex flex-col justify-between h-full pointer-events-none">
+                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
+                    <img src="gallery-yard.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
+                    <div class="relative z-10 flex flex-col justify-between h-full">
                         <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
                             Save as: <span class="text-rose-500 font-bold">gallery-yard.jpg</span>
                         </div>
                         <div class="flex flex-col items-center justify-center my-auto">
                             <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300 text-center">Click to Upload Construction Yard Photo</p>
+                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Construction Yard Photo</p>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto relative z-20 pointer-events-none">
-                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Construction Yard</span>
-                        <h4 class="font-extrabold text-sm mt-0.5">Cutting Discs & Safety Gear</h4>
+                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
+                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Construction Yard</span>
+                            <h4 class="font-extrabold text-sm mt-0.5">Cutting Discs & Safety Gear</h4>
+                        </div>
                     </div>
                 </div>
 
@@ -1155,8 +1085,8 @@
                 <div class="lg:col-span-5 space-y-4">
                     <div class="flex items-center gap-3">
                         <div id="footer-logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg flex items-center justify-center overflow-hidden">
-                            <img id="img-logo-footer" src="" class="w-full h-full object-cover hidden" alt="Dhisle Hardware Logo">
-                            <i id="footer-fallback-logo-icon" class="fa-solid fa-cubes text-white text-xl"></i>
+                            <img src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('footer-fallback-logo-icon').classList.remove('hidden');">
+                            <i id="footer-fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl"></i>
                         </div>
                         <div class="flex flex-col">
                             <span class="font-extrabold text-xl tracking-tight leading-none text-white">
@@ -1241,253 +1171,145 @@
         </a>
     </div>
 
-    <!-- Admin Portal Login Modal -->
-    <div id="admin-login-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300">
-        <div class="bg-white dark:bg-zinc-900 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-zinc-800 shadow-2xl relative">
-            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-orange-100 dark:bg-orange-950/40 text-brand-orange rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
-                    <i class="fa-solid fa-user-gear"></i>
-                </div>
-                <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Dhisle Hardware Admin Portal</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Authorized store management dashboard login</p>
-            </div>
-
-            <form id="admin-login-form" onsubmit="handleAdminLoginSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Access Password</label>
-                    <input type="password" id="admin-password" placeholder="Enter security password (Default: admin123)" required class="w-full px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm focus:ring-2 focus:ring-brand-orange focus:outline-none dark:text-white"/>
-                </div>
-                
-                <div id="login-error-msg" class="hidden text-xs text-rose-500 font-bold bg-rose-50 dark:bg-rose-950/20 p-2 rounded-lg border border-rose-200 dark:border-rose-900/30">
-                    Incorrect password. Please try again or use default: <code class="font-mono bg-white dark:bg-zinc-900 px-1 py-0.5 rounded">admin123</code>
-                </div>
-
-                <button type="submit" class="w-full py-3 bg-brand-orange hover:bg-brand-accent text-white font-bold rounded-xl text-sm shadow-lg transition-colors flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-unlock"></i> Unlock Store Management Mode
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Firebase Modular Imports for Multi-device Cloud Sync -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Constants & Configs
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'dhisle-hardware-traders';
-        
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        let firebaseInitialized = false;
-
+    <!-- JAVASCRIPT LOGIC BLOCK -->
+    <script>
+        // Custom interactive products dataset
+        // Images have been mapped to local, easy-to-remember naming conventions.
+        // If these files do not exist yet, our smart renderer creates a gorgeous CSS graphic box guide automatically!
         const productsData = [
-            { id: 1, name: "Nuts & Bolts Assortment", category: "Hardware Items", desc: "Grade 8.8 high-tensile fasteners, bolts, and washers.", icon: "fa-solid fa-circle-nodes", imgKey: "product-1" },
-            { id: 2, name: "Industrial Locks & Hinges", category: "Hardware Items", desc: "Heavy brass locks, hinges, and premium door hardware fittings.", icon: "fa-solid fa-key", imgKey: "product-2" },
-            { id: 3, name: "Angle & MS Channels", category: "Steel & Metal", desc: "Hot-rolled mild steel structural channels for construction frames.", icon: "fa-solid fa-square-envelope", imgKey: "product-3" },
-            { id: 4, name: "Tata Steel Round Pipe", category: "Steel & Metal", desc: "Galvanized hollow pipes for fencing & structural building.", icon: "fa-solid fa-circle", imgKey: "product-4" },
-            { id: 5, name: "Patra Roofing Sheets", category: "Roofing & Sheet Materials", desc: "Anti-rust coated galvanized corrugated roofing sheets.", icon: "fa-solid fa-layer-group", imgKey: "product-5" },
-            { id: 6, name: "Asian Paints Apex Emulsion", category: "Paint & Finishing", desc: "High-grade weather protective exterior emulsion paints.", icon: "fa-solid fa-paintbrush", imgKey: "product-6" },
-            { id: 7, name: "CPVC Hot/Cold Pipes", category: "Plumbing Materials", desc: "Chlorinated polyvinyl chloride pipes for industrial fluid transport.", icon: "fa-solid fa-droplet", imgKey: "product-7" },
-            { id: 8, name: "Agriculture Spray Pump", category: "Agricultural Equipment", desc: "Knapsack manual and battery operated power pest spray units.", icon: "fa-solid fa-spray-can-sparkles", imgKey: "product-8" },
-            { id: 9, name: "Drip Irrigation Valve", category: "Agricultural Equipment", desc: "Low-pressure high efficiency water emission irrigation pipeline valves.", icon: "fa-solid fa-seedling", imgKey: "product-9" },
-            { id: 10, name: "Water Motors / Submersible Pumps", category: "Agricultural Equipment", desc: "Heavy duty copper-wound agricultural water motor sets.", icon: "fa-solid fa-gears", imgKey: "product-10" },
-            { id: 11, name: "Berger Wall Putty & Primer", category: "Paint & Finishing", desc: "Moisture resistant interior paint bases for smooth gloss finishes.", icon: "fa-solid fa-palette", imgKey: "product-11" },
-            { id: 12, name: "Concrete Cutting Discs", category: "Construction Materials", desc: "Heavy diamond grit masonry circular saw cutting wheels.", icon: "fa-solid fa-compact-disc", imgKey: "product-12" }
+            { id: 1, name: "Nuts & Bolts Assortment", category: "Hardware Items", desc: "Grade 8.8 high-tensile fasteners, bolts, and washers.", icon: "fa-solid fa-circle-nodes", img: "product-1.jpg" },
+            { id: 2, name: "Industrial Locks & Hinges", category: "Hardware Items", desc: "Heavy brass locks, hinges, and premium door hardware fittings.", icon: "fa-solid fa-key", img: "product-2.jpg" },
+            { id: 3, name: "Angle & MS Channels", category: "Steel & Metal", desc: "Hot-rolled mild steel structural channels for construction frames.", icon: "fa-solid fa-square-envelope", img: "product-3.jpg" },
+            { id: 4, name: "Tata Steel Round Pipe", category: "Steel & Metal", desc: "Galvanized hollow pipes for fencing & structural building.", icon: "fa-solid fa-circle", img: "product-4.jpg" },
+            { id: 5, name: "Patra Roofing Sheets", category: "Roofing & Sheet Materials", desc: "Anti-rust coated galvanized corrugated roofing sheets.", icon: "fa-solid fa-layer-group", img: "product-5.jpg" },
+            { id: 6, name: "Asian Paints Apex Emulsion", category: "Paint & Finishing", desc: "High-grade weather protective exterior emulsion paints.", icon: "fa-solid fa-paintbrush", img: "product-6.jpg" },
+            { id: 7, name: "CPVC Hot/Cold Pipes", category: "Plumbing Materials", desc: "Chlorinated polyvinyl chloride pipes for industrial fluid transport.", icon: "fa-solid fa-droplet", img: "product-7.jpg" },
+            { id: 8, name: "Agriculture Spray Pump", category: "Agricultural Equipment", desc: "Knapsack manual and battery operated power pest spray units.", icon: "fa-solid fa-spray-can-sparkles", img: "product-8.jpg" },
+            { id: 9, name: "Drip Irrigation Valve", category: "Agricultural Equipment", desc: "Low-pressure high efficiency water emission irrigation pipeline valves.", icon: "fa-solid fa-seedling", img: "product-9.jpg" },
+            { id: 10, name: "Water Motors / Submersible Pumps", category: "Agricultural Equipment", desc: "Heavy duty copper-wound agricultural water motor sets.", icon: "fa-solid fa-gears", img: "product-10.jpg" },
+            { id: 11, name: "Berger Wall Putty & Primer", category: "Paint & Finishing", desc: "Moisture resistant interior paint bases for smooth gloss finishes.", icon: "fa-solid fa-palette", img: "product-11.jpg" },
+            { id: 12, name: "Concrete Cutting Discs", category: "Construction Materials", desc: "Heavy diamond grit masonry circular saw cutting wheels.", icon: "fa-solid fa-compact-disc", img: "product-12.jpg" }
         ];
 
         let selectedCategory = "All";
-        let isAdminLoggedIn = false;
-        let selectedUploadKey = null;
-        let imageCache = {};
 
-        // Status Badge controls
-        function showCloudStatus(status) {
-            const badge = document.getElementById("cloud-sync-badge");
-            const dot = document.getElementById("cloud-sync-dot");
-            const text = document.getElementById("cloud-sync-text");
+        window.addEventListener('DOMContentLoaded', () => {
+            // Remove Page Loader
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('opacity-0');
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 800);
+
+            // Populate Filter Pills Dynamic Creation
+            generateCategoryFilterPills();
+
+            // Populate Product Grid UI
+            renderProductsGrid();
+
+            // Trigger statistics animation observer
+            setupStatsCounterObserver();
+
+            // Handle Light / Dark Theme on load
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Sticky Nav shrink effect & show Back to Top button
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            const topBtn = document.getElementById('back-to-top');
             
-            if (!badge || !dot || !text) return;
-
-            if (status === "connected") {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-green-500";
-                text.textContent = "Cloud Sync: Connected 🟢";
-                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-green-950/40 text-[11px] text-green-300 border border-green-900/30";
-            } else if (status === "offline") {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-zinc-500";
-                text.textContent = "Offline Mode (Local Only)";
-                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400";
-            } else if (status === "uploading") {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping";
-                text.textContent = "Syncing Upload...";
-                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-950/40 text-[11px] text-amber-300 border border-amber-900/30";
-            } else if (status === "error") {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
-                text.textContent = "Sync Error";
-                badge.className = "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-950/40 text-[11px] text-rose-300 border border-rose-900/30";
+            if (window.scrollY > 120) {
+                header.classList.add('shadow-md', 'h-16');
+                header.classList.remove('h-20');
+                topBtn.classList.remove('hidden');
+                topBtn.classList.add('flex');
+            } else {
+                header.classList.remove('shadow-md', 'h-16');
+                header.classList.add('h-20');
+                topBtn.classList.add('hidden');
+                topBtn.classList.remove('flex');
             }
-        }
+        });
 
-        async function initFirebaseAndAuth() {
-            if (typeof __firebase_config === 'undefined') {
-                console.warn("Firebase config not available. Cloud sync is disabled. Running locally.");
-                showCloudStatus("offline");
-                renderProductsGrid();
-                return;
+        // Theme Toggle Handler
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
             }
+        });
 
-            try {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                // Rule 3: Auth first before doing anything
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    const userCred = await signInWithCustomToken(auth, __initial_auth_token);
-                    currentUser = userCred.user;
-                } else {
-                    const userCred = await signInAnonymously(auth);
-                    currentUser = userCred.user;
-                }
-                
-                if (currentUser) {
-                    firebaseInitialized = true;
-                    showCloudStatus("connected");
-                    setupRealtimeImageSync();
-                }
-            } catch (err) {
-                console.error("Firebase Auth / Init Error:", err);
-                showCloudStatus("error");
-                renderProductsGrid(); // fallback to local rendering
-            }
-        }
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
 
-        function setupRealtimeImageSync() {
-            if (!firebaseInitialized || !db) return;
+        // Close Mobile Menu on clicking links
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
 
-            // Rule 1: Strict collection path reference
-            const imagesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'images');
+        // Generate Unique Categories from Dataset
+        function generateCategoryFilterPills() {
+            const categoriesSet = new Set(productsData.map(p => p.category));
+            const container = document.getElementById('filter-pills-container');
+            
+            container.innerHTML = `
+                <button onclick="setFilterCategory('All')" class="category-pill active-pill px-4 py-2 bg-brand-orange text-white rounded-xl text-xs font-bold whitespace-nowrap transition-all">
+                    All Categories
+                </button>
+            `;
 
-            onSnapshot(imagesCollection, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    const key = change.doc.id;
-                    if (change.type === "added" || change.type === "modified") {
-                        const docData = change.doc.data();
-                        const base64Data = docData.base64;
-                        
-                        imageCache[key] = base64Data;
-                        applyStoredImageToDOM(key, base64Data);
-                    } else if (change.type === "removed") {
-                        delete imageCache[key];
-                        resetImageOnDOM(key);
-                    }
-                });
-                // Re-render product grids dynamically
-                renderProductsGrid();
-            }, (error) => {
-                console.error("Error listening to image collection: ", error);
-                showCloudStatus("error");
+            categoriesSet.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = "category-pill px-4 py-2 bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-brand-orange hover:text-white";
+                btn.textContent = cat;
+                btn.onclick = () => setFilterCategory(cat, btn);
+                container.appendChild(btn);
             });
         }
 
-        function applyStoredImageToDOM(key, base64Data) {
-            const staticImg = document.getElementById("img-" + key);
-            const placeholder = document.getElementById("placeholder-" + key);
-            const ownerIcon = document.getElementById("placeholder-owner-icon");
+        // Filter Categories Handler
+        function setFilterCategory(category, buttonElement) {
+            selectedCategory = category;
+            
+            const pills = document.querySelectorAll('.category-pill');
+            pills.forEach(p => {
+                p.classList.remove('bg-brand-orange', 'text-white', 'active-pill');
+                p.classList.add('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
+            });
 
-            if (staticImg) {
-                staticImg.src = base64Data;
-                staticImg.classList.remove("hidden");
-                if (placeholder) placeholder.classList.add("hidden");
-                if (key === 'owner' && ownerIcon) ownerIcon.classList.add("hidden");
+            if (buttonElement) {
+                buttonElement.classList.add('bg-brand-orange', 'text-white', 'active-pill');
+                buttonElement.classList.remove('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
+            } else {
+                pills[0].classList.add('bg-brand-orange', 'text-white', 'active-pill');
             }
 
-            if (key === 'logo') {
-                const footerLogo = document.getElementById("img-logo-footer");
-                if (footerLogo) {
-                    footerLogo.src = base64Data;
-                    footerLogo.classList.remove("hidden");
-                }
-                const headerFallback = document.getElementById("fallback-logo-icon");
-                if (headerFallback) headerFallback.classList.add("hidden");
-                const footerFallback = document.getElementById("footer-fallback-logo-icon");
-                if (footerFallback) footerFallback.classList.add("hidden");
-            }
+            renderProductsGrid();
         }
 
-        function showUploadLoading(key) {
-            const staticImg = document.getElementById("img-" + key);
-            const placeholder = document.getElementById("placeholder-" + key);
-            let container = null;
-            if (staticImg) container = staticImg.parentElement;
-            else if (placeholder) container = placeholder.parentElement;
-
-            if (container) {
-                let overlay = container.querySelector(".upload-sync-overlay");
-                if (!overlay) {
-                    overlay = document.createElement("div");
-                    overlay.className = "upload-sync-overlay absolute inset-0 bg-black/75 z-40 flex flex-col items-center justify-center text-white text-xs font-bold gap-2";
-                    overlay.innerHTML = `<div class="w-6 h-6 border-2 border-t-brand-orange border-r-transparent rounded-full animate-spin"></div><span>Uploading to Cloud...</span>`;
-                    container.appendChild(overlay);
-                }
-            }
+        // Live Search Input handler
+        function filterProducts() {
+            renderProductsGrid();
         }
 
-        function hideUploadLoading(key) {
-            const staticImg = document.getElementById("img-" + key);
-            const placeholder = document.getElementById("placeholder-" + key);
-            let container = null;
-            if (staticImg) container = staticImg.parentElement;
-            else if (placeholder) container = placeholder.parentElement;
-
-            if (container) {
-                const overlay = container.querySelector(".upload-sync-overlay");
-                if (overlay) overlay.remove();
-            }
-        }
-
-        function resetImageOnDOM(key) {
-            const staticImg = document.getElementById("img-" + key);
-            const placeholder = document.getElementById("placeholder-" + key);
-            const ownerIcon = document.getElementById("placeholder-owner-icon");
-
-            if (staticImg) {
-                staticImg.src = "";
-                staticImg.classList.add("hidden");
-            }
-            if (placeholder) {
-                placeholder.classList.remove("hidden");
-            }
-            if (key === 'owner' && ownerIcon) {
-                ownerIcon.classList.remove("hidden");
-            }
-            if (key === 'logo') {
-                const footerLogo = document.getElementById("img-logo-footer");
-                if (footerLogo) {
-                    footerLogo.src = "";
-                    footerLogo.classList.add("hidden");
-                }
-                const headerFallback = document.getElementById("fallback-logo-icon");
-                if (headerFallback) headerFallback.classList.remove("hidden");
-                const footerFallback = document.getElementById("footer-fallback-logo-icon");
-                if (footerFallback) footerFallback.classList.remove("hidden");
-            }
-        }
-
+        // Main Render Loop for product list with robust image fallbacks
         function renderProductsGrid() {
-            const searchInputObj = document.getElementById('live-product-search');
-            const searchInput = searchInputObj ? searchInputObj.value.toLowerCase() : "";
+            const searchInput = document.getElementById('live-product-search').value.toLowerCase();
             const grid = document.getElementById('product-grid');
             const emptyState = document.getElementById('no-products-found');
-
-            if (!grid) return;
 
             const filtered = productsData.filter(product => {
                 const matchesCat = (selectedCategory === "All" || product.category === selectedCategory);
@@ -1498,35 +1320,33 @@
             grid.innerHTML = "";
 
             if (filtered.length === 0) {
-                if (emptyState) emptyState.classList.remove('hidden');
+                emptyState.classList.remove('hidden');
                 grid.classList.add('hidden');
             } else {
-                if (emptyState) emptyState.classList.add('hidden');
+                emptyState.classList.add('hidden');
                 grid.classList.remove('hidden');
 
                 filtered.forEach(p => {
                     const card = document.createElement('div');
-                    card.className = "bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between relative";
+                    card.className = "bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between";
                     
-                    const cachedImage = imageCache[p.imgKey];
-                    const hasImage = cachedImage ? true : false;
-
+                    // Card structure featuring a dual-layer guide frame.
+                    // If the user hasn't dropped `product-x.jpg` in their folder, a clean modern placeholder renders seamlessly.
                     card.innerHTML = `
                         <div>
-                            <!-- Photo Spot Wrapper (Clickable in admin mode) -->
-                            <div class="admin-editable relative h-44 overflow-hidden group bg-slate-100 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800/50 flex flex-col justify-between p-3" onclick="triggerImageUpload('${p.imgKey}', event)">
+                            <div class="relative h-44 overflow-hidden group bg-slate-100 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800/50 flex flex-col justify-between p-3">
                                 
-                                <img src="${hasImage ? cachedImage : ''}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 z-0 ${hasImage ? '' : 'hidden'}" id="img-${p.imgKey}"/>
+                                <img src="${p.img}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 z-0" onerror="this.style.display='none'; document.getElementById('guide-${p.id}').classList.remove('hidden');"/>
                                 
-                                <div id="placeholder-${p.imgKey}" class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-zinc-900 dark:to-zinc-800 ${hasImage ? 'hidden' : ''}">
+                                <div id="guide-${p.id}" class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-zinc-900 dark:to-zinc-800">
                                     <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mb-1">
                                         <i class="fa-solid fa-camera text-base"></i>
                                     </div>
-                                    <p class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center">Click/Upload Slot:</p>
-                                    <code class="text-[10px] bg-white dark:bg-zinc-950 px-1.5 py-0.5 rounded text-rose-500 font-mono font-bold mt-0.5">${p.imgKey}.jpg</code>
+                                    <p class="text-[10px] font-bold text-slate-600 dark:text-slate-300">Save Photo as:</p>
+                                    <code class="text-[10px] bg-white dark:bg-zinc-950 px-1.5 py-0.5 rounded text-rose-500 font-mono font-bold mt-0.5">${p.img}</code>
                                 </div>
 
-                                <div class="relative z-20 flex justify-between items-center w-full pointer-events-none">
+                                <div class="relative z-20 flex justify-between items-center w-full">
                                     <span class="px-2 py-1 bg-brand-charcoal/90 dark:bg-black/90 backdrop-blur-md text-white rounded-lg text-[9px] font-bold tracking-wider uppercase">
                                         <i class="${p.icon} text-brand-orange mr-1"></i> ${p.category}
                                     </span>
@@ -1548,183 +1368,7 @@
             }
         }
 
-        function triggerImageUpload(key, event) {
-            if (!isAdminLoggedIn) return; 
-            event.stopPropagation();
-            selectedUploadKey = key;
-            document.getElementById("master-image-uploader").click();
-        }
-
-        function handleMasterImageUploaded(event) {
-            const file = event.target.files[0];
-            if (!file || !selectedUploadKey) return;
-
-            showUploadLoading(selectedUploadKey);
-            showCloudStatus("uploading");
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    // Dynamic boundaries for high definition but extremely lightweight images (max width: 800px)
-                    const MAX_WIDTH = 800;
-                    const MAX_HEIGHT = 600;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Compress to lightweight high quality JPG (0.6 quality gives perfect balances)
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.65);
-                    
-                    uploadToCloudDatabase(selectedUploadKey, compressedBase64);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function uploadToCloudDatabase(key, base64String) {
-            if (!firebaseInitialized || !db) {
-                // Fallback to local image caching if database configurations are absent
-                imageCache[key] = base64String;
-                applyStoredImageToDOM(key, base64String);
-                renderProductsGrid();
-                hideUploadLoading(key);
-                showCloudStatus("offline");
-                selectedUploadKey = null;
-                document.getElementById("master-image-uploader").value = "";
-                return;
-            }
-
-            try {
-                // Rule 1: Strict paths compliant
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'images', key);
-                await setDoc(docRef, {
-                    base64: base64String,
-                    updatedAt: new Date().getTime()
-                });
-
-                showCloudStatus("connected");
-                hideUploadLoading(key);
-            } catch (err) {
-                console.error("Cloud upload error: ", err);
-                showCloudStatus("error");
-                hideUploadLoading(key);
-            }
-
-            selectedUploadKey = null;
-            document.getElementById("master-image-uploader").value = "";
-        }
-
-        async function triggerResetAllImages() {
-            if (!confirm("Are you sure you want to delete all uploaded shop images across all devices? This will reset all photos to the upload guide frames.")) return;
-            
-            showCloudStatus("uploading");
-            
-            const staticKeys = [
-                'logo', 'owner', 'hero-steel', 'hero-tools', 'hero-paints', 'hero-agri',
-                'gallery-interior', 'gallery-steel', 'gallery-paint', 'gallery-agri', 'gallery-plumbing', 'gallery-yard'
-            ];
-            
-            const productKeys = productsData.map(p => p.imgKey);
-            const allKeys = [...staticKeys, ...productKeys];
-
-            if (firebaseInitialized && db) {
-                for (const key of allKeys) {
-                    try {
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'images', key);
-                        await deleteDoc(docRef);
-                    } catch (e) {
-                        console.error("Resetting key error:", key, e);
-                    }
-                }
-                showCloudStatus("connected");
-            } else {
-                imageCache = {};
-                allKeys.forEach(key => resetImageOnDOM(key));
-                renderProductsGrid();
-                showCloudStatus("offline");
-            }
-        }
-
-        function openAdminModal() {
-            document.getElementById("admin-login-modal").classList.remove("hidden");
-            document.getElementById("admin-password").focus();
-        }
-
-        function closeAdminModal() {
-            document.getElementById("admin-login-modal").classList.add("hidden");
-            document.getElementById("login-error-msg").classList.add("hidden");
-            document.getElementById("admin-password").value = "";
-        }
-
-        function handleAdminLoginSubmit(e) {
-            e.preventDefault();
-            const pass = document.getElementById("admin-password").value;
-            
-            if (pass === "admin123") {
-                activateAdminMode();
-                closeAdminModal();
-            } else {
-                document.getElementById("login-error-msg").classList.remove("hidden");
-            }
-        }
-
-        function activateAdminMode() {
-            isAdminLoggedIn = true;
-            sessionStorage.adminActive = "true";
-            document.body.classList.add("admin-mode-active");
-            document.getElementById("admin-status-banner").classList.remove("hidden");
-            renderProductsGrid(); 
-        }
-
-        function logoutAdmin() {
-            isAdminLoggedIn = false;
-            sessionStorage.adminActive = "false";
-            document.body.classList.remove("admin-mode-active");
-            document.getElementById("admin-status-banner").classList.add("hidden");
-            renderProductsGrid(); 
-        }
-
-        function setFilterCategory(category, buttonElement) {
-            selectedCategory = category;
-            
-            const pills = document.querySelectorAll('.category-pill');
-            pills.forEach(p => {
-                p.classList.remove('bg-brand-orange', 'text-white', 'active-pill');
-                p.classList.add('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
-            });
-
-            if (buttonElement) {
-                buttonElement.classList.add('bg-brand-orange', 'text-white', 'active-pill');
-                buttonElement.classList.remove('bg-slate-100', 'dark:bg-zinc-800', 'text-slate-700', 'dark:text-slate-300');
-            } else {
-                pills[0].classList.add('bg-brand-orange', 'text-white', 'active-pill');
-            }
-
-            renderProductsGrid();
-        }
-
-        function filterProducts() {
-            renderProductsGrid();
-        }
-
+        // Quick WhatsApp click handle for specific products
         function initiateQuickWhatsAppInquiry(productName, category) {
             const phone = "919359876866";
             const text = `Hello Dhisle Hardware! I was browsing your redesigned web catalog and would like to request a trade quote for:
@@ -1736,18 +1380,19 @@ Please send stock availability & latest bulk trade pricing rates!`;
             window.open(`https://wa.me/${phone}?text=${encoded}`, '_blank');
         }
 
+        // Quick search trigger from hero
         function scrollToProductsAndSearch() {
             const val = document.getElementById('hero-search-input').value;
-            const liveSearch = document.getElementById('live-product-search');
-            if (liveSearch) liveSearch.value = val;
+            document.getElementById('live-product-search').value = val;
             
             const catSec = document.getElementById('categories');
-            if (catSec) catSec.scrollIntoView({ behavior: 'smooth' });
+            catSec.scrollIntoView({ behavior: 'smooth' });
             
             setFilterCategory('All');
             filterProducts();
         }
 
+        // Steel Weight Estimation Calculator Formula
         function calculateSteelWeight() {
             const length = parseFloat(document.getElementById('steel-length').value) || 0;
             const width = parseFloat(document.getElementById('steel-width').value) || 0;
@@ -1758,6 +1403,7 @@ Please send stock availability & latest bulk trade pricing rates!`;
             document.getElementById('steel-weight-result').textContent = `${weight.toFixed(2)} kg`;
         }
 
+        // Paint Coverage Estimator Formula
         function calculatePaint() {
             const area = parseFloat(document.getElementById('paint-area').value) || 0;
             const coats = parseInt(document.getElementById('paint-coats').value) || 2;
@@ -1767,6 +1413,7 @@ Please send stock availability & latest bulk trade pricing rates!`;
             document.getElementById('paint-result').textContent = `${liters > 0 ? liters : 0} Liters`;
         }
 
+        // Steel Weight WhatsApp redirection
         function requestSteelQuote() {
             const length = document.getElementById('steel-length').value;
             const width = document.getElementById('steel-width').value;
@@ -1783,6 +1430,7 @@ Please send pricing and dispatch availability of MS Steel sheets.`;
             window.open(`https://wa.me/919359876866?text=${encodeURIComponent(text)}`, '_blank');
         }
 
+        // Paint coverage WhatsApp redirection
         function requestPaintQuote() {
             const area = document.getElementById('paint-area').value;
             const coats = document.getElementById('paint-coats').value;
@@ -1797,6 +1445,7 @@ I want to consult an expert regarding color shading and Asian Paints bulk discou
             window.open(`https://wa.me/919359876866?text=${encodeURIComponent(text)}`, '_blank');
         }
 
+        // Interactive Masonry Gallery Filter Logic
         function filterGallery(category) {
             const tabs = document.querySelectorAll('.gallery-tab');
             tabs.forEach(tab => {
@@ -1814,6 +1463,7 @@ I want to consult an expert regarding color shading and Asian Paints bulk discou
             });
         }
 
+        // Complete WhatsApp Quote Builder Form Submission Handler
         function sendWhatsAppQuoteForm(e) {
             e.preventDefault();
 
@@ -1837,6 +1487,7 @@ Please reply with a price estimate. Thank you!`;
             window.open(`https://wa.me/919359876866?text=${encodeURIComponent(message)}`, '_blank');
         }
 
+        // Statistics Counter Intersection Observer Trigger
         function setupStatsCounterObserver() {
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -1863,129 +1514,8 @@ Please reply with a price estimate. Thank you!`;
                 });
             }, { threshold: 0.1 });
 
-            const statsGrid = document.getElementById('stats-grid');
-            if (statsGrid) observer.observe(statsGrid);
+            observer.observe(document.getElementById('stats-grid'));
         }
-
-        window.openAdminModal = openAdminModal;
-        window.closeAdminModal = closeAdminModal;
-        window.handleAdminLoginSubmit = handleAdminLoginSubmit;
-        window.activateAdminMode = activateAdminMode;
-        window.logoutAdmin = logoutAdmin;
-        window.triggerImageUpload = triggerImageUpload;
-        window.handleMasterImageUploaded = handleMasterImageUploaded;
-        window.triggerResetAllImages = triggerResetAllImages;
-        window.setFilterCategory = setFilterCategory;
-        window.filterProducts = filterProducts;
-        window.initiateQuickWhatsAppInquiry = initiateQuickWhatsAppInquiry;
-        window.scrollToProductsAndSearch = scrollToProductsAndSearch;
-        window.calculateSteelWeight = calculateSteelWeight;
-        window.calculatePaint = calculatePaint;
-        window.requestSteelQuote = requestSteelQuote;
-        window.requestPaintQuote = requestPaintQuote;
-        window.filterGallery = filterGallery;
-        window.sendWhatsAppQuoteForm = sendWhatsAppQuoteForm;
-
-        // Dom Ready Callbacks
-        window.addEventListener('DOMContentLoaded', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                if (loader) {
-                    loader.classList.add('opacity-0');
-                    setTimeout(() => loader.style.display = 'none', 500);
-                }
-            }, 800);
-
-            // Fetch dynamic categories
-            const categoriesSet = new Set(productsData.map(p => p.category));
-            const container = document.getElementById('filter-pills-container');
-            if (container) {
-                container.innerHTML = `
-                    <button onclick="setFilterCategory('All')" class="category-pill active-pill px-4 py-2 bg-brand-orange text-white rounded-xl text-xs font-bold whitespace-nowrap transition-all">
-                        All Categories
-                    </button>
-                `;
-                categoriesSet.forEach(cat => {
-                    const btn = document.createElement('button');
-                    btn.className = "category-pill px-4 py-2 bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-bold whitespace-nowrap transition-all hover:bg-brand-orange hover:text-white";
-                    btn.textContent = cat;
-                    btn.onclick = () => setFilterCategory(cat, btn);
-                    container.appendChild(btn);
-                });
-            }
-
-            setupStatsCounterObserver();
-
-            // Set default dark/light state
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-
-            if (sessionStorage.adminActive === "true") {
-                activateAdminMode();
-            }
-
-            // Init Firebase Cloud sync loop!
-            initFirebaseAndAuth();
-        });
-
-        // Shrinking nav header & Back to Top triggers
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('main-header');
-            const topBtn = document.getElementById('back-to-top');
-            
-            if (window.scrollY > 120) {
-                if (header) {
-                    header.classList.add('shadow-md', 'h-16');
-                    header.classList.remove('h-20');
-                }
-                if (topBtn) {
-                    topBtn.classList.remove('hidden');
-                    topBtn.classList.add('flex');
-                }
-            } else {
-                if (header) {
-                    header.classList.remove('shadow-md', 'h-16');
-                    header.classList.add('h-20');
-                }
-                if (topBtn) {
-                    topBtn.classList.add('hidden');
-                    topBtn.classList.remove('flex');
-                }
-            }
-        });
-
-        // Theme changer
-        const themeBtn = document.getElementById('theme-toggle');
-        if (themeBtn) {
-            themeBtn.addEventListener('click', () => {
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
-                    localStorage.theme = 'light';
-                } else {
-                    document.documentElement.classList.add('dark');
-                    localStorage.theme = 'dark';
-                }
-            });
-        }
-
-        // Mobile layout interactions
-        const mBtn = document.getElementById('mobile-menu-btn');
-        if (mBtn) {
-            mBtn.addEventListener('click', () => {
-                const menu = document.getElementById('mobile-menu');
-                if (menu) menu.classList.toggle('hidden');
-            });
-        }
-
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                const menu = document.getElementById('mobile-menu');
-                if (menu) menu.classList.add('hidden');
-            });
-        });
     </script>
 </body>
 </html>
