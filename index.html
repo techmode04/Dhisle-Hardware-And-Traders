@@ -35,7 +35,7 @@
     <!-- Google Fonts & Font Awesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -129,7 +129,7 @@
             <div class="flex items-center gap-2">
                 <a href="#" class="flex items-center gap-3 group focus:outline-none">
                     <div id="logo-container" class="bg-brand-orange w-11 h-11 rounded-lg shadow-lg shadow-brand-orange/20 transition-all duration-300 group-hover:scale-105 flex items-center justify-center overflow-hidden">
-                        <!-- Smart Image Loader: If logo.png is missing, it shows a beautiful SVG hardware icon seamlessly -->
+                        <!-- Smart Image Loader: Shows logo.png, or falls back to a neat SVG if missing -->
                         <img src="logo.png" class="w-full h-full object-cover" alt="Dhisle Hardware Logo" onerror="this.style.display='none'; document.getElementById('fallback-logo-icon').classList.remove('hidden');">
                         <i id="fallback-logo-icon" class="hidden fa-solid fa-cubes text-white text-xl md:text-2xl animate-pulse"></i>
                     </div>
@@ -271,7 +271,7 @@
                     </div>
                 </div>
 
-                <!-- Right Visual Area: Product Showroom Showcase Grid with custom photo upload cues -->
+                <!-- Right Visual Area: Product Showroom Showcase Grid (Cleaned and Polished) -->
                 <div class="lg:col-span-5 relative">
                     <div class="absolute inset-0 bg-brand-orange/10 dark:bg-brand-orange/20 rounded-3xl blur-3xl transform rotate-6 scale-90"></div>
                     
@@ -279,30 +279,23 @@
                         <!-- Column 1: Steel Structure & Handtools -->
                         <div class="space-y-4">
                             <!-- Card 1: Steel Structure -->
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4">
-                                <!-- Background Image Loader (Fails gracefully to instructions) -->
-                               <img
-    src="cover.jpg"
-    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0"
-    alt="Cover Photo"
->
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-800 flex flex-col justify-end h-48 p-4">
+                                <!-- Background Image (Fails gracefully to beautiful custom brand visual placeholder) -->
+                                <img src="cover.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Cover Photo" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Dhisle+Hardware';">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                                <div class="relative z-20 mt-auto">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Structural Yard</span>
+                                    <h3 class="font-bold text-xs text-white">Tata & Jindal Steel</h3>
+                                </div>
+                            </div>
                             
                             <!-- Card 2: Hardware Handtools -->
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4">
-                                <img src="in.JPG" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
-                                
-                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
-                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold">in.JPG</span>
-                                    </div>
-                                    <div class="flex flex-col items-center justify-center my-auto py-1">
-                                        <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold">Add Tools Photo</p>
-                                    </div>
-                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
-                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Hardware Store</span>
-                                        <h3 class="font-bold text-xs">Premium Tools</h3>
-                                    </div>
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-800 flex flex-col justify-end h-36 p-4">
+                                <img src="in.JPG" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Hardware Handtools" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Premium+Tools';">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                                <div class="relative z-20 mt-auto">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Hardware Store</span>
+                                    <h3 class="font-bold text-xs text-white">Premium Tools</h3>
                                 </div>
                             </div>
                         </div>
@@ -310,40 +303,22 @@
                         <!-- Column 2: Paints & Farming -->
                         <div class="space-y-4 pt-8">
                             <!-- Card 3: Paints & Brushes -->
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-36 p-4">
-                                <img src="paint.JPG" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
-                                
-                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
-                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold">paint.JPG</span>
-                                    </div>
-                                    <div class="flex flex-col items-center justify-center my-auto py-1">
-                                        <i class="fa-solid fa-camera text-xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[9px] text-slate-500 dark:text-slate-400 font-bold">Add Paint Photo</p>
-                                    </div>
-                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
-                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Vibrant Homes</span>
-                                        <h3 class="font-bold text-xs">Asian & Berger Paints</h3>
-                                    </div>
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-800 flex flex-col justify-end h-36 p-4">
+                                <img src="paint.JPG" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Paints & Brushes" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Asian+Paints';">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                                <div class="relative z-20 mt-auto">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Vibrant Homes</span>
+                                    <h3 class="font-bold text-xs text-white">Asian & Berger Paints</h3>
                                 </div>
                             </div>
 
                             <!-- Card 4: Agriculture Pumps -->
-                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border-2 border-dashed border-slate-300 dark:border-zinc-700 flex flex-col justify-between h-48 p-4">
-                                <img src="back.JPG" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="" onerror="this.style.display='none';">
-                                
-                                <div class="relative z-10 flex flex-col justify-between h-full w-full pointer-events-none">
-                                    <div class="bg-white/80 dark:bg-black/80 px-2 py-1 rounded text-[10px] font-mono tracking-tight text-slate-800 dark:text-slate-200 self-start">
-                                        File: <span class="font-bold">back.JPG</span>
-                                    </div>
-                                    <div class="flex flex-col items-center justify-center my-auto py-2">
-                                        <i class="fa-solid fa-camera text-2xl text-brand-orange/60 mb-1"></i>
-                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold">Add Agri Photo</p>
-                                    </div>
-                                    <div class="bg-brand-charcoal/90 p-2 rounded text-white mt-auto">
-                                        <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Lokhnd </span>
-                                        <h3 class="font-bold text-xs">Pipe,Angle,patti & Patra</h3>
-                                    </div>
+                            <div class="relative rounded-2xl overflow-hidden shadow-lg group bg-slate-200/60 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-800 flex flex-col justify-end h-48 p-4">
+                                <img src="back.JPG" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Agricultural Pipes" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Agricultural+Pipes';">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                                <div class="relative z-20 mt-auto">
+                                    <span class="text-[9px] font-bold uppercase tracking-widest text-brand-orange block">Lokhnd</span>
+                                    <h3 class="font-bold text-xs text-white">Pipe, Angle, Patti & Patra</h3>
                                 </div>
                             </div>
                         </div>
@@ -359,24 +334,21 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 
-                <!-- Left Column: Visual Brand Anchor with smart local upload fallbacks -->
+                <!-- Left Column: Visual Brand Anchor (Cleaned and Polished) -->
                 <div class="relative">
                     <div class="absolute -top-4 -left-4 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl"></div>
                     
                     <div class="relative border-4 border-slate-100 dark:border-zinc-800 rounded-3xl p-6 overflow-hidden bg-slate-50 dark:bg-zinc-900 shadow-xl">
                         
-                        <!-- Owner/Shop Showcase Picture Placeholder -->
-                        <div class="relative rounded-2xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-zinc-700 bg-slate-200/40 dark:bg-zinc-800/40 h-[380px] w-full flex flex-col justify-between p-6">
-                            <img src="owner.png" alt="Dhisle Hardware Storefront" class="absolute inset-0 rounded-2xl w-full h-full object-cover" onerror="this.style.display='none';">
+                        <!-- Owner/Shop Showcase Picture (Clean wrapper without upload text instructions) -->
+                        <div class="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900 h-[380px] w-full flex flex-col justify-end p-6">
+                            <img src="owner.png" alt="Dhisle Hardware Storefront" class="absolute inset-0 rounded-2xl w-full h-full object-cover z-0" onerror="this.src='https://placehold.co/800x600/111111/ffffff?text=Dhisle+Hardware+Storefront';">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
                             
-                        
-
-                            <div class="relative z-10 flex flex-col items-center justify-center my-auto">
-                                <div class="w-16 h-16 rounded-full bg-brand-orange/10 dark:bg-brand-orange/20 flex items-center justify-center text-brand-orange mb-3 animate-bounce">
-                                    <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
-                                </div>
-                                <span class="text-sm font-bold text-slate-700 dark:text-zinc-300">Save Photo as "owner.png"</span>
-                                <span class="text-xs text-slate-400 dark:text-zinc-500 mt-1">Recommended size: 800 x 600 px</span>
+                            <div class="relative z-20 text-white">
+                                <span class="text-[10px] font-bold text-brand-orange uppercase tracking-wider block">Authorized Dealer</span>
+                                <h3 class="text-xl font-extrabold mt-1">Dhisle Hardware & Traders</h3>
+                                <p class="text-xs text-zinc-300 mt-1">Visit us at Ch. Shivaji Maharaj Chowk, Raimoha, Beed</p>
                             </div>
                         </div>
                         
@@ -721,114 +693,66 @@
                 </div>
             </div>
 
-            <!-- Gallery Images Grid (Guides for uploading your real photos) -->
+            <!-- Gallery Images Grid (Guides removed; pristine clean preview layout with direct fallbacks) -->
             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
                 
                 <!-- Gallery Card 1: Interior -->
-                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
-                    <img src="gallery-interior.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
-                    <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
-                            Save as: <span class="text-rose-500 font-bold">gallery-interior.jpg</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center my-auto">
-                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Interior Showroom Photo</p>
-                        </div>
-                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Interior Showroom</span>
-                            <h4 class="font-extrabold text-sm mt-0.5">Premium Hardware Counters</h4>
-                        </div>
+                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-80 flex flex-col justify-end">
+                    <img src="gallery-interior.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Interior Showroom" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Showroom+Interior';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                    <div class="relative z-20 p-5 text-white">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Interior Showroom</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Premium Hardware Counters</h4>
                     </div>
                 </div>
 
                 <!-- Gallery Card 2: Steel -->
-                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
-                    <img src="gallery-steel.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
-                    <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
-                            Save as: <span class="text-rose-500 font-bold">gallery-steel.jpg</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center my-auto">
-                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Steel Yard Photo</p>
-                        </div>
-                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Steel Yard</span>
-                            <h4 class="font-extrabold text-sm mt-0.5">Structural Sections Stock</h4>
-                        </div>
+                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-80 flex flex-col justify-end">
+                    <img src="gallery-steel.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Steel Yard" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Steel+Yard';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                    <div class="relative z-20 p-5 text-white">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Steel Yard</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Structural Sections Stock</h4>
                     </div>
                 </div>
 
                 <!-- Gallery Card 3: Paints -->
-                <div class="gallery-item paint relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
-                    <img src="gallery-paint.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
-                    <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
-                            Save as: <span class="text-rose-500 font-bold">gallery-paint.jpg</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center my-auto">
-                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Paint Section Photo</p>
-                        </div>
-                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Paints Section</span>
-                            <h4 class="font-extrabold text-sm mt-0.5">Computerized Mixing Machine</h4>
-                        </div>
+                <div class="gallery-item paint relative rounded-2xl overflow-hidden group shadow-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-80 flex flex-col justify-end">
+                    <img src="gallery-paint.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Paints Section" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Paints+Section';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                    <div class="relative z-20 p-5 text-white">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Paints Section</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Computerized Mixing Machine</h4>
                     </div>
                 </div>
 
                 <!-- Gallery Card 4: Agri -->
-                <div class="gallery-item agri relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
-                    <img src="gallery-agri.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
-                    <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
-                            Save as: <span class="text-rose-500 font-bold">gallery-agri.jpg</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center my-auto">
-                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Agri Stocks Photo</p>
-                        </div>
-                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Agricultural Stocks</span>
-                            <h4 class="font-extrabold text-sm mt-0.5">High-Pressure Spray Pumps</h4>
-                        </div>
+                <div class="gallery-item agri relative rounded-2xl overflow-hidden group shadow-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-80 flex flex-col justify-end">
+                    <img src="gallery-agri.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Agricultural Stocks" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Agricultural+Stocks';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                    <div class="relative z-20 p-5 text-white">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Agricultural Stocks</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">High-Pressure Spray Pumps</h4>
                     </div>
                 </div>
 
                 <!-- Gallery Card 5: Plumbing/Pipes -->
-                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
-                    <img src="gallery-plumbing.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
-                    <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
-                            Save as: <span class="text-rose-500 font-bold">gallery-plumbing.jpg</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center my-auto">
-                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Pipes / Fittings Photo</p>
-                        </div>
-                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Pipes & Fittings</span>
-                            <h4 class="font-extrabold text-sm mt-0.5">CPVC & PVC Connectors</h4>
-                        </div>
+                <div class="gallery-item showroom relative rounded-2xl overflow-hidden group shadow-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-80 flex flex-col justify-end">
+                    <img src="gallery-plumbing.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Pipes & Fittings" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Pipes+%26+Fittings';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                    <div class="relative z-20 p-5 text-white">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Pipes & Fittings</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">CPVC & PVC Connectors</h4>
                     </div>
                 </div>
 
                 <!-- Gallery Card 6: Construction Yard / Tools -->
-                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-white dark:bg-zinc-900 border-2 border-dashed border-slate-200 dark:border-zinc-800 p-4 h-80 flex flex-col justify-between">
-                    <img src="gallery-yard.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" onerror="this.style.display='none';">
-                    <div class="relative z-10 flex flex-col justify-between h-full">
-                        <div class="bg-white/95 dark:bg-zinc-900/95 p-2 rounded-lg text-[10px] font-mono self-start border border-slate-100 dark:border-zinc-800">
-                            Save as: <span class="text-rose-500 font-bold">gallery-yard.jpg</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center my-auto">
-                            <i class="fa-solid fa-images text-3xl text-brand-orange/40 mb-2"></i>
-                            <p class="text-xs font-bold text-slate-700 dark:text-zinc-300">Add Construction Yard Photo</p>
-                        </div>
-                        <div class="bg-slate-900/90 text-white p-3 rounded-xl mt-auto">
-                            <span class="text-[10px] font-bold text-brand-orange uppercase block">Construction Yard</span>
-                            <h4 class="font-extrabold text-sm mt-0.5">Cutting Discs & Safety Gear</h4>
-                        </div>
+                <div class="gallery-item steel relative rounded-2xl overflow-hidden group shadow-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 h-80 flex flex-col justify-end">
+                    <img src="gallery-yard.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 z-0" alt="Construction Yard" onerror="this.src='https://placehold.co/600x400/ff6b00/ffffff?text=Construction+Yard';">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent z-10"></div>
+                    <div class="relative z-20 p-5 text-white">
+                        <span class="text-[10px] font-bold text-brand-orange uppercase block">Construction Yard</span>
+                        <h4 class="font-extrabold text-sm mt-0.5">Cutting Discs & Safety Gear</h4>
                     </div>
                 </div>
 
@@ -1162,9 +1086,7 @@
 
     <!-- JAVASCRIPT LOGIC BLOCK -->
     <script>
-        // Custom interactive products dataset
-        // Images have been mapped to local, easy-to-remember naming conventions.
-        // If these files do not exist yet, our smart renderer creates a gorgeous CSS graphic box guide automatically!
+        // Custom interactive products dataset with clean local paths
         const productsData = [
             { id: 1, name: "Nuts & Bolts Assortment", category: "Hardware Items", desc: "Grade 8.8 high-tensile fasteners, bolts, and washers.", icon: "fa-solid fa-circle-nodes", img: "product-1.jpg" },
             { id: 2, name: "Industrial Locks & Hinges", category: "Hardware Items", desc: "Heavy brass locks, hinges, and premium door hardware fittings.", icon: "fa-solid fa-key", img: "product-2.jpg" },
@@ -1294,7 +1216,7 @@
             renderProductsGrid();
         }
 
-        // Main Render Loop for product list with robust image fallbacks
+        // Main Render Loop for product list (Clean visual card fallback instead of text guides)
         function renderProductsGrid() {
             const searchInput = document.getElementById('live-product-search').value.toLowerCase();
             const grid = document.getElementById('product-grid');
@@ -1319,25 +1241,24 @@
                     const card = document.createElement('div');
                     card.className = "bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200/60 dark:border-zinc-800/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col justify-between";
                     
-                    // Card structure featuring a dual-layer guide frame.
-                    // If the user hasn't dropped `product-x.jpg` in their folder, a clean modern placeholder renders seamlessly.
+                    // Card structure with zero instruction text. If the real image does not load,
+                    // it cleanly falls back to a gorgeous matching color brand gradient container with category icon.
                     card.innerHTML = `
                         <div>
-                            <div class="relative h-44 overflow-hidden group bg-slate-100 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800/50 flex flex-col justify-between p-3">
+                            <div class="relative h-44 overflow-hidden group bg-slate-100 dark:bg-zinc-800/50 border-b border-slate-200 dark:border-zinc-800/50 flex items-center justify-center">
                                 
-                                <img src="${p.img}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 z-0" onerror="this.style.display='none'; document.getElementById('guide-${p.id}').classList.remove('hidden');"/>
+                                <img src="${p.img}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 z-10" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"/>
                                 
-                                <div id="guide-${p.id}" class="hidden absolute inset-0 z-10 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-slate-50 to-slate-100 dark:from-zinc-900 dark:to-zinc-800">
-                                    <div class="w-10 h-10 rounded-full bg-brand-orange/10 flex items-center justify-center text-brand-orange mb-1">
-                                        <i class="fa-solid fa-camera text-base"></i>
+                                <div class="hidden absolute inset-0 bg-gradient-to-br from-brand-orange/10 to-amber-500/10 dark:from-zinc-900 dark:to-zinc-850 flex flex-col items-center justify-center p-4 text-center">
+                                    <div class="w-14 h-14 rounded-full bg-brand-orange/10 dark:bg-brand-orange/20 flex items-center justify-center text-brand-orange text-2xl mb-2">
+                                        <i class="${p.icon}"></i>
                                     </div>
-                                    <p class="text-[10px] font-bold text-slate-600 dark:text-slate-300">Save Photo as:</p>
-                                    <code class="text-[10px] bg-white dark:bg-zinc-950 px-1.5 py-0.5 rounded text-rose-500 font-mono font-bold mt-0.5">${p.img}</code>
+                                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300">${p.category}</span>
                                 </div>
 
-                                <div class="relative z-20 flex justify-between items-center w-full">
-                                    <span class="px-2 py-1 bg-brand-charcoal/90 dark:bg-black/90 backdrop-blur-md text-white rounded-lg text-[9px] font-bold tracking-wider uppercase">
-                                        <i class="${p.icon} text-brand-orange mr-1"></i> ${p.category}
+                                <div class="absolute top-3 left-3 z-20">
+                                    <span class="px-2.5 py-1 bg-brand-charcoal/90 dark:bg-black/90 backdrop-blur-md text-white rounded-lg text-[9px] font-bold tracking-wider uppercase flex items-center gap-1.5 shadow-sm">
+                                        <i class="${p.icon} text-brand-orange"></i> ${p.category}
                                     </span>
                                 </div>
                             </div>
